@@ -1,15 +1,11 @@
 package controller;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
 import connection.Connection;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 public class PersonalDataController {
@@ -22,7 +18,7 @@ public class PersonalDataController {
 	private static final byte[] GET_LOCATION = { 0x70, 0x4B, 0x00, 0x00 };
 	private static final byte[] GET_STREET = { 0x70, 0x5B, 0x00, 0x00 };
 	private static final byte[] GET_PHONEN = { 0x70, 0x6B, 0x00, 0x00 };
-	private static final byte[] GET_PIC = { 0x70, 0x7B, 0x00, 0x00 };
+	//private static final byte[] GET_PIC = { 0x70, 0x7B, 0x00, 0x00 };
 	
 	@FXML
 	private TextField fnameField;

@@ -17,11 +17,11 @@ public class App extends Application {
 
 		Parent root = FXMLLoader.load(getClass().getResource("UI/mainView.fxml"));
 
-		Scene scene = new Scene(root, 700, 400);	
+		Scene scene = new Scene(root, 700, 400);
 
 		stage.setTitle("SmartCard-Projekt");
 		stage.setScene(scene);
-		stage.show();	
+		stage.show();
 	}
 
 }

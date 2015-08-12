@@ -28,7 +28,7 @@ public class ManagePersonalDataController implements Initializable {
 	private static final byte[] GET_LOCATION = { 0x70, 0x4B, 0x00, 0x00 };
 	private static final byte[] GET_STREET = { 0x70, 0x5B, 0x00, 0x00 };
 	private static final byte[] GET_PHONEN = { 0x70, 0x6B, 0x00, 0x00 };
-	private static final byte[] GET_PIC = { 0x70, 0x7B, 0x00, 0x00 };
+	// private static final byte[] GET_PIC = { 0x70, 0x7B, 0x00, 0x00 };
 
 	private static final byte[] SET_FNAME = { 0x70, 0x1A, 0x00, 0x00 };
 	private static final byte[] SET_SURNAME = { 0x70, 0x2A, 0x00, 0x00 };
@@ -36,7 +36,7 @@ public class ManagePersonalDataController implements Initializable {
 	private static final byte[] SET_LOCATION = { 0x70, 0x4A, 0x00, 0x00 };
 	private static final byte[] SET_STREET = { 0x70, 0x5A, 0x00, 0x00 };
 	private static final byte[] SET_PHONEN = { 0x70, 0x6A, 0x00, 0x00 };
-	private static final byte[] SET_PIC = { 0x70, 0x7A, 0x00, 0x00 };
+	// private static final byte[] SET_PIC = { 0x70, 0x7A, 0x00, 0x00 };
 
 	@FXML
 	private TextField fnameField;
