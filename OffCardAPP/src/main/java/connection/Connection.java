@@ -11,6 +11,8 @@ import javax.smartcardio.CardChannel;
 import javax.smartcardio.TerminalFactory;
 
 public class Connection {
+	
+	private static final byte[] EMPTY = { (byte) 0x00, 0x00, 0x00, 0x00 };
 
 	private static CardTerminal terminal;
 	private static Card card;
@@ -77,12 +79,16 @@ public class Connection {
 	
 	public static ResponseAPDU send(CommandAPDU select) {
 
-		ResponseAPDU answer = null;
-
+		ResponseAPDU answer = new ResponseAPDU(EMPTY);
+		
 		try {
 			answer = getCardChannel().transmit(select);
 		} catch (CardException e) {
 			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			System.err.println("Nicht zur Karte verbunden");
+		} catch (NullPointerException e) {
+			System.err.println("Keine Antwort erhalten");
 		}
 
 		return answer;
