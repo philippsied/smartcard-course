@@ -25,9 +25,9 @@
                         <fx:include fx:id="cptab" source="cashpointTab.fxml"/>
                      </content>
                 </Tab>
-                <Tab text="Personaldaten">
+                <Tab text="Personendaten">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <fx:include fx:id="pdtab" source="personalDataTab.fxml"/>
                   </content>
                 </Tab>
               </tabs>
@@ -38,7 +38,7 @@
          <content>
             <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="Personaldaten verwalten">
+                <Tab text="Personendaten verwalten">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
