@@ -26,12 +26,16 @@ public class ConnectionPaneController {
 	@FXML
 	protected void handleConnectAction(ActionEvent event) {
 		try {
+			CardTerminal terminal = (CardTerminal) terminalCombo.getSelectionModel().getSelectedItem();
+			TerminalConnection.INSTANCE.chooseTerminal(terminal);
 			if (TerminalConnection.INSTANCE.connect()) {
 				parentView.setText("Verbunden!");
 				parentView.setTextFill(Color.GREEN);
+			} else {
+				parentView.setText("ERROR!");
 			}
 		} catch (CardException e) {
-			parentView.setText("ERROR!");
+			printError(e);
 		}
 	}
 
@@ -43,7 +47,7 @@ public class ConnectionPaneController {
 				parentView.setTextFill(Color.RED);
 			}
 		} catch (CardException e) {
-			parentView.setText("ERROR!");
+			printError(e);
 		}
 	}
 
@@ -54,21 +58,22 @@ public class ConnectionPaneController {
 			terminalCombo.getItems().clear();
 			terminals.forEach(t -> terminalCombo.getItems().add(t));
 		} catch (CardException e) {
-			parentView.setText("ERROR!");
+			printError(e);
 		}
 	}
 
 	@FXML
 	protected void handleComboClicked() {
-		try {
-			CardTerminal terminal = (CardTerminal) terminalCombo.getSelectionModel().getSelectedItem();
-			TerminalConnection.INSTANCE.chooseTerminal(terminal);
-		} catch (CardException e) {
-			parentView.setText("ERROR!");
-		}
+		// Nothing To do
 	}
 
 	public void setParentView(TitledPane parentView) {
 		this.parentView = parentView;
+	}
+
+	private void printError(Throwable e) {
+		System.err.println(e.getLocalizedMessage());
+		parentView.setText("ERROR!");
+		parentView.setTextFill(Color.RED);
 	}
 }
