@@ -3,15 +3,15 @@ package controller.data;
 public class AmountKV {
 
 	private String key;
-	private int amount;
+	private short amountInCent;
 
-	public AmountKV(int amount) {
-		this.key = String.valueOf(amount) + "€";
-		this.amount = amount;
+	public AmountKV(short amount) {
+		this.key = String.valueOf(amount) + "Cent";
+		this.amountInCent = amount;
 	}
 
-	public int getValue() {
-		return amount;
+	public short getValue() {
+		return amountInCent;
 	}
 
 	@Override

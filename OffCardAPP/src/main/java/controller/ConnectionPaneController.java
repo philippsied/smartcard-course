@@ -2,9 +2,10 @@ package controller;
 
 import java.util.List;
 
+import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
-import connection.Connection;
+import connection.TerminalConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -16,6 +17,7 @@ public class ConnectionPaneController {
 
 	@FXML
 	private ComboBox<CardTerminal> terminalCombo;
+
 	@FXML
 	private AnchorPane childConnection;
 
@@ -23,35 +25,50 @@ public class ConnectionPaneController {
 
 	@FXML
 	protected void handleConnectAction(ActionEvent event) {
-		if (Connection.connect()) {
-			parentView.setText("Verbunden!");
-			parentView.setTextFill(Color.GREEN);
+		try {
+			if (TerminalConnection.INSTANCE.connect()) {
+				parentView.setText("Verbunden!");
+				parentView.setTextFill(Color.GREEN);
+			}
+		} catch (CardException e) {
+			parentView.setText("ERROR!");
 		}
 	}
 
 	@FXML
 	protected void handleDisconnectAction(ActionEvent event) {
-		if (Connection.disconnect()) {
-			parentView.setText("Nicht verbunden!");
-			parentView.setTextFill(Color.RED);
+		try {
+			if (TerminalConnection.INSTANCE.disconnect()) {
+				parentView.setText("Nicht verbunden!");
+				parentView.setTextFill(Color.RED);
+			}
+		} catch (CardException e) {
+			parentView.setText("ERROR!");
 		}
 	}
 
 	@FXML
 	protected void handleComboShowing() {
-		List<CardTerminal> terminals = Connection.getTerminals();
-		terminalCombo.getItems().clear();
-		terminals.forEach(t -> terminalCombo.getItems().add(t));
+		try {
+			List<CardTerminal> terminals = TerminalConnection.getTerminals();
+			terminalCombo.getItems().clear();
+			terminals.forEach(t -> terminalCombo.getItems().add(t));
+		} catch (CardException e) {
+			parentView.setText("ERROR!");
+		}
 	}
 
 	@FXML
 	protected void handleComboClicked() {
-		CardTerminal terminal = (CardTerminal) terminalCombo.getSelectionModel().getSelectedItem();
-		Connection.setTerminal(terminal);
+		try {
+			CardTerminal terminal = (CardTerminal) terminalCombo.getSelectionModel().getSelectedItem();
+			TerminalConnection.INSTANCE.chooseTerminal(terminal);
+		} catch (CardException e) {
+			parentView.setText("ERROR!");
+		}
 	}
 
 	public void setParentView(TitledPane parentView) {
 		this.parentView = parentView;
 	}
-
 }
