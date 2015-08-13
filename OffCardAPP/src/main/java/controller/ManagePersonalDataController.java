@@ -7,10 +7,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
+import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
-import connection.Connection;
+import clientAPI.impl.CardConnection;
+import connection.TerminalConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
@@ -60,7 +62,7 @@ public class ManagePersonalDataController implements Initializable {
 	protected void handleSetAction() {
 
 		CommandAPDU select = new CommandAPDU(0x00, 0xA4, 0x04, 0x00, AID);
-		Connection.send(select);
+		send(select);
 
 		sendFieldToCard(SET_FNAME, getFieldText(fnameField));
 		sendFieldToCard(SET_SURNAME, getFieldText(surnameField));
@@ -73,7 +75,7 @@ public class ManagePersonalDataController implements Initializable {
 	@FXML
 	protected void handleGetAction() {
 		CommandAPDU select = new CommandAPDU(0x00, 0xA4, 0x04, 0x00, AID);
-		Connection.send(select);
+		send(select);
 		fnameField.setText(setFieldFromCard(GET_FNAME));
 		surnameField.setText(setFieldFromCard(GET_SURNAME));
 		locationField.setText(setFieldFromCard(GET_LOCATION));
@@ -89,7 +91,7 @@ public class ManagePersonalDataController implements Initializable {
 
 	public void sendFieldToCard(byte[] dest, String toSend) {
 		CommandAPDU query = new CommandAPDU(dest[0], dest[1], dest[2], dest[3], toSend.getBytes());
-		Connection.send(query);
+		send(query);
 	}
 
 	private String getFieldText(TextField textField) {
@@ -110,7 +112,7 @@ public class ManagePersonalDataController implements Initializable {
 
 	public String setFieldFromCard(byte[] src) {
 		CommandAPDU tmp = new CommandAPDU(src);
-		ResponseAPDU answer = Connection.send(tmp);
+		ResponseAPDU answer = send(tmp);
 		return new String(answer.getData(), StandardCharsets.UTF_8);
 	}
 
@@ -124,4 +126,18 @@ public class ManagePersonalDataController implements Initializable {
 		phonenField.setPromptText("01");
 	}
 
+	/**
+	 * Temporärer Workaround
+	 * 
+	 * @return
+	 */
+	private ResponseAPDU send(CommandAPDU cmd) {
+		try {
+			CardConnection cc = new CardConnection(TerminalConnection.INSTANCE.getCurrentCard());
+			return cc.sendAPDU(cmd);
+		} catch (CardException e) {
+			System.err.println("Error");
+		}
+		return null;
+	}
 }

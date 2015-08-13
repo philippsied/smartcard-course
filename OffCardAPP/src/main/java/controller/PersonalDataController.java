@@ -1,10 +1,13 @@
 package controller;
 
 import java.nio.charset.StandardCharsets;
+
+import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
-import connection.Connection;
+import clientAPI.impl.CardConnection;
+import connection.TerminalConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -42,7 +45,7 @@ public class PersonalDataController {
 	@FXML
 	protected void handleGetAction() {
 		CommandAPDU select = new CommandAPDU(0x00, 0xA4, 0x04, 0x00, AID);
-		Connection.send(select);
+		send(select);
 		fnameField.setText(setFieldFromCard(GET_FNAME));
 		surnameField.setText(setFieldFromCard(GET_SURNAME));
 		bdayField.setText(setFieldFromCard(GET_BDAY));
@@ -53,10 +56,23 @@ public class PersonalDataController {
 	
 	public String setFieldFromCard(byte[] src) {
 		CommandAPDU tmp = new CommandAPDU(src);
-		ResponseAPDU answer = Connection.send(tmp);
+		ResponseAPDU answer = send(tmp);
 		return new String(answer.getData(), StandardCharsets.UTF_8);
 	}
 	
-	
+	/**
+	 * Temporärer Workaround
+	 * 
+	 * @return
+	 */
+	private ResponseAPDU send(CommandAPDU cmd) {
+		try {
+			CardConnection cc = new CardConnection(TerminalConnection.INSTANCE.getCurrentCard());
+			return cc.sendAPDU(cmd);
+		} catch (CardException e) {
+			System.err.println("Error");
+		}
+		return null;
+	}
 
 }
