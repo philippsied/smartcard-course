@@ -1,0 +1,11 @@
+# JCIDE
+/bin/
+stateInfo.xml1
+debugConfig.xml
+breakPointInfo.xml
+jumpRecordInfo.xml
+bookMarkInfo.xml
+LocalJChomeProperty.xml
+LocalJavahomeProperty.xml
+*.class
+
