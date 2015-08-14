@@ -3,7 +3,7 @@ package clientAPI.impl;
 import static clientAPI.impl.OncardAPI.WalletOncard.ADD_MONEY;
 import static clientAPI.impl.OncardAPI.WalletOncard.AID;
 import static clientAPI.impl.OncardAPI.WalletOncard.CHECK_BALANCE;
-import static clientAPI.impl.OncardAPI.WalletOncard.REM_MONEY;
+import static clientAPI.impl.OncardAPI.WalletOncard.SUB_MONEY;
 
 import java.nio.ByteBuffer;
 
@@ -31,7 +31,7 @@ public class WalletConnector implements Wallet {
 	@Override
 	public void removeMoney(short amountInCent) throws CardException {
 		checkForError(mConnection.select(AID));
-		ResponseAPDU response = mConnection.sendAPDU(REM_MONEY, CryptoHelper.signData(amountInCent), (short) 0);
+		ResponseAPDU response = mConnection.sendAPDU(SUB_MONEY, CryptoHelper.signData(amountInCent), (short) 0);
 		checkForError(response);
 	}
 
