@@ -3,7 +3,7 @@ package clientAPI.impl;
 import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.ADD_CREDITS;
 import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.AID;
 import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.CHECK_BALANCE;
-import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.REM_CREDITS;
+import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.SUB_CREDITS;
 
 import java.nio.ByteBuffer;
 
@@ -28,7 +28,7 @@ public class BonusCreditStoreConnector implements BonusCreditStore {
 
 	public void removeBonusCredits(short amount) throws CardException {
 		checkForError(mConnection.select(AID));
-		ResponseAPDU response = mConnection.sendAPDU(REM_CREDITS, CryptoHelper.signData(amount), (short) 0);
+		ResponseAPDU response = mConnection.sendAPDU(SUB_CREDITS, CryptoHelper.signData(amount), (short) 0);
 		checkForError(response);
 	}
 

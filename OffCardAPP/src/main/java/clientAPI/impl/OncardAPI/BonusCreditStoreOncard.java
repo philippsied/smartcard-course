@@ -28,7 +28,7 @@ public interface BonusCreditStoreOncard {
 	 * LC: 0x02 (fix) <br>
 	 * </pre>
 	 */
-	public final static CommandHeader REM_CREDITS = new CommandHeader( (byte) 0xE0, (byte) 0x20, (byte) 0x00, (byte) 0x00, (short) 2, CmdType.LC_NoLE);
+	public final static CommandHeader SUB_CREDITS = new CommandHeader( (byte) 0xE0, (byte) 0x20, (byte) 0x00, (byte) 0x00, (short) 2, CmdType.LC_NoLE);
 	
 	/**
 	 * Get current amount of bonus credits from store <br>
@@ -45,6 +45,6 @@ public interface BonusCreditStoreOncard {
 	
 	// Place for error codes
 	
-	public final static short ERROR_INSUFFICIENT_AMOUNT = 0x6A83; 
-	public final static short ERROR_TRANS_EXCEED_MAXIMUM_AMOUNT = 0x6A84;
+	public final static short ERROR_INSUFFICIENT_BALANCE = 0x6A83; 
+	public final static short ERROR_TRANS_EXCEED_MAXIMUM_BALANCE = 0x6A84;
 }
