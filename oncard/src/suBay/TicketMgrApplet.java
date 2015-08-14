@@ -2,12 +2,12 @@ package suBay;
 
 import javacard.framework.*;
 
-public class TicketMgr extends Applet
+public class TicketMgrApplet extends Applet
 {
 
 	public static void install(byte[] bArray, short bOffset, byte bLength) 
 	{
-		new TicketMgr().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
+		new TicketMgrApplet().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
 	}
 
 	public void process(APDU apdu)

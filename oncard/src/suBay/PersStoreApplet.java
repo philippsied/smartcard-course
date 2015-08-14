@@ -2,12 +2,12 @@ package suBay;
 
 import javacard.framework.*;
 
-public class PersStore extends Applet
+public class PersStoreApplet extends Applet
 {
 
 	public static void install(byte[] bArray, short bOffset, byte bLength) 
 	{
-		new PersStore().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
+		new PersStoreApplet().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
 	}
 
 	public void process(APDU apdu)
