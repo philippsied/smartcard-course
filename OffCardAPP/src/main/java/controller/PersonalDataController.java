@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.image.BufferedImage;
 import java.nio.charset.StandardCharsets;
 
 import javax.smartcardio.CardException;
@@ -8,20 +9,24 @@ import javax.smartcardio.ResponseAPDU;
 
 import clientAPI.impl.CardConnection;
 import connection.TerminalConnection;
+import controller.data.PictureConverter;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class PersonalDataController {
 	
 	private static final byte[] AID = { (byte) 0x00, 0x01, 0x02, 0x03, 0x05, 0x00 };
 	
-	private static final byte[] GET_FNAME = { (byte) 0x70, 0x1B, 0x00, 0x00, 0x00 };
-	private static final byte[] GET_SURNAME = { (byte) 0x70, 0x2B, 0x00, 0x00, 0x00 };
-	private static final byte[] GET_BDAY = { 0x70, 0x3B, 0x00, 0x00 };
-	private static final byte[] GET_LOCATION = { 0x70, 0x4B, 0x00, 0x00 };
-	private static final byte[] GET_STREET = { 0x70, 0x5B, 0x00, 0x00 };
-	private static final byte[] GET_PHONEN = { 0x70, 0x6B, 0x00, 0x00 };
-	//private static final byte[] GET_PIC = { 0x70, 0x7B, 0x00, 0x00 };
+	private static final byte[] GET_FNAME = { (byte) 0xE0, 0x1B, 0x00, 0x00, 0x00 };
+	private static final byte[] GET_SURNAME = { (byte) 0xE0, 0x2B, 0x00, 0x00, 0x00 };
+	private static final byte[] GET_BDAY = { (byte) 0xE0, 0x3B, 0x00, 0x00 };
+	private static final byte[] GET_LOCATION = { (byte) 0xE0, 0x4B, 0x00, 0x00 };
+	private static final byte[] GET_STREET = { (byte) 0xE0, 0x5B, 0x00, 0x00 };
+	private static final byte[] GET_PHONEN = { (byte) 0xE0, 0x6B, 0x00, 0x00 };
+	private static final byte[] GET_PIC = { (byte) 0xE0, 0x7B, 0x00, 0x00 };
 	
 	@FXML
 	private TextField fnameField;
@@ -41,6 +46,8 @@ public class PersonalDataController {
 	@FXML
 	private TextField phonenField;
 	
+	@FXML
+	private ImageView imageV;
 	
 	@FXML
 	protected void handleGetAction() {
@@ -52,12 +59,24 @@ public class PersonalDataController {
 		locationField.setText(setFieldFromCard(GET_LOCATION));
 		streetField.setText(setFieldFromCard(GET_STREET));
 		phonenField.setText(setFieldFromCard(GET_PHONEN));
+		
+		imageV.setImage(setPicFromCard());
 	}
 	
 	public String setFieldFromCard(byte[] src) {
 		CommandAPDU tmp = new CommandAPDU(src);
 		ResponseAPDU answer = send(tmp);
 		return new String(answer.getData(), StandardCharsets.UTF_8);
+	}
+	
+	private Image setPicFromCard() {
+		CommandAPDU query = new CommandAPDU(GET_PIC);
+		ResponseAPDU answer = send(query);
+		
+		PictureConverter pc = new PictureConverter();
+		BufferedImage bi = pc.writeImage(answer.getData());
+		
+		return SwingFXUtils.toFXImage(bi, null);
 	}
 	
 	/**

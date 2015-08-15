@@ -1,0 +1,8 @@
+
+.picpane {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 15, 0, 0, 0);
+} 
+
+.picpane:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(200,100,0,1), 15, 0, 0, 0);
+} 
