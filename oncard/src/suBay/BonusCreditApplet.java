@@ -2,8 +2,7 @@ package suBay;
 
 import javacard.framework.*;
 
-public class BonusCreditApplet extends Applet
-{
+public class BonusCreditApplet extends Applet {
 
     final static byte CLA = (byte) 0xE0; 
     final static byte INS_ADD_CREDITS = (byte) 0x10; 
@@ -14,35 +13,29 @@ public class BonusCreditApplet extends Applet
 	
 	private ShortStore balance;
 
-	private BonusCreditApplet(){
+	private BonusCreditApplet() {
 		balance = new ShortStore(START_VALUE);
 	}
 
 
 	//overide
-	public static void install(byte[] bArray, short bOffset, byte bLength) 
-	{
+	public static void install(byte[] bArray, short bOffset, byte bLength) {
 		new BonusCreditApplet().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
 	}
 	
 	//overide
-	public boolean select() 
-    { 
+	public boolean select() { 
 		return true; 
     }
 	
 	//overide
-	public void process(APDU apdu)
-	{
-		if (selectingApplet())
-		{
+	public void process(APDU apdu) {
+		if (selectingApplet()) {
 			return;
 		}
 		byte[] buffer = apdu.getBuffer(); 
-		if (buffer[ISO7816.OFFSET_CLA] == CLA)  
-	    { 
-			switch(buffer[ISO7816.OFFSET_INS])
-			{
+		if (buffer[ISO7816.OFFSET_CLA] == CLA) { 
+			switch(buffer[ISO7816.OFFSET_INS]) {
 			case INS_ADD_CREDITS:
 						handleAdd(apdu,buffer);
 						break;
@@ -53,9 +46,11 @@ public class BonusCreditApplet extends Applet
 						handleCheck(apdu,buffer);
 						break;					
 			default:
-						ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);	
+				ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);	
 			}
-		}
+		} else {
+		    ISOException.throwIt(ISO7816.SW_CLA_NOT_SUPPORTED);
+	    }
 	}
 
 	private void handleAdd(APDU apdu, byte[] buffer) {
