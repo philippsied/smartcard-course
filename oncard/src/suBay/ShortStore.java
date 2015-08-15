@@ -3,7 +3,7 @@ public class ShortStore {
 	
 	private short storedValue;
 	  
-	public ShortStore(short initVal){
+	public ShortStore(short initVal) {
 	  this.storedValue = initVal;
 	}
 	  
@@ -11,8 +11,7 @@ public class ShortStore {
 	 *
 	 *
 	 */
-	//overide
-	public short getValue(){
+	public short getValue() {
 	  return this.storedValue;
 	}
 	  	
@@ -20,11 +19,9 @@ public class ShortStore {
 	 *
 	 * return True, if adding of diff was successful
 	 */
-	//overide
-	public boolean addValue(short diff){
+	public boolean addValue(short diff) {
 		short newAmount = (short) (this.storedValue + diff);
-		if(newAmount > this.storedValue)
-		{
+		if (newAmount > this.storedValue) {
 			this.storedValue = newAmount;
 			return true;
 		}
@@ -35,10 +32,8 @@ public class ShortStore {
 	 *
 	 * return True, if removing of diff was successful
 	 */
-	//overide
-	public boolean subValue(short diff){
-		if(diff < this.storedValue)
-		{
+	public boolean subValue(short diff) {
+		if (diff < this.storedValue) {
 			this.storedValue -= diff;
 			return true;
 		}
