@@ -18,7 +18,7 @@ import javafx.scene.image.ImageView;
 
 public class PersonalDataController {
 	
-	private static final byte[] AID = { (byte) 0x00, 0x01, 0x02, 0x03, 0x05, 0x00 };
+	private static final byte[] AID = { (byte) 0xFD, 'u', 'B', 'a', 'y', 'P', 'e', 'r', 's', 'S', 't', 'o', 'r', 'e' };
 	
 	private static final byte[] GET_FNAME = { (byte) 0xE0, 0x1B, 0x00, 0x00, 0x00 };
 	private static final byte[] GET_SURNAME = { (byte) 0xE0, 0x2B, 0x00, 0x00, 0x00 };

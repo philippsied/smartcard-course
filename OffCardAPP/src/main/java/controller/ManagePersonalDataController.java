@@ -30,8 +30,8 @@ public class ManagePersonalDataController implements Initializable {
 
 	private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 	private File file = null;
-	
-	private static final byte[] AID = { (byte) 0x00, 0x01, 0x02, 0x03, 0x05, 0x00 };
+
+	private static final byte[] AID = { (byte) 0xFD, 'u', 'B', 'a', 'y', 'P', 'e', 'r', 's', 'S', 't', 'o', 'r', 'e' };
 
 	private static final byte[] GET_FNAME = { (byte) 0x70, 0x1B, 0x00, 0x00, 0x00 };
 	private static final byte[] GET_SURNAME = { (byte) 0x70, 0x2B, 0x00, 0x00, 0x00 };
@@ -66,7 +66,7 @@ public class ManagePersonalDataController implements Initializable {
 
 	@FXML
 	private TextField phonenField;
-	
+
 	@FXML
 	private ImageView imageV;
 
@@ -85,20 +85,19 @@ public class ManagePersonalDataController implements Initializable {
 		sendPicToCard(SET_PIC);
 	}
 
-
 	@FXML
 	protected void handleGetAction() {
 		CommandAPDU select = new CommandAPDU(0x00, 0xA4, 0x04, 0x00, AID);
 		send(select);
-		
+
 		fnameField.setText(setFieldFromCard(GET_FNAME));
 		surnameField.setText(setFieldFromCard(GET_SURNAME));
 		locationField.setText(setFieldFromCard(GET_LOCATION));
 		streetField.setText(setFieldFromCard(GET_STREET));
 		phonenField.setText(setFieldFromCard(GET_PHONEN));
-		
+
 		imageV.setImage(setPicFromCard());
-	
+
 		try {
 			bdayField.setValue(LocalDate.parse(setFieldFromCard(GET_BDAY), dateTimeFormatter));
 		} catch (DateTimeParseException e) {
@@ -107,13 +106,13 @@ public class ManagePersonalDataController implements Initializable {
 	}
 
 	private void sendPicToCard(byte[] setPic) {
-		
-		if(file != null){
+
+		if (file != null) {
 			PictureConverter pc = new PictureConverter();
 			byte[] pic = pc.resizeAsByteArray(file);
 			sendFieldToCard(setPic, pic);
 		}
-		
+
 	}
 
 	public void sendFieldToCard(byte[] dest, byte[] toSend) {
@@ -126,17 +125,17 @@ public class ManagePersonalDataController implements Initializable {
 		ResponseAPDU answer = send(tmp);
 		return new String(answer.getData(), StandardCharsets.UTF_8);
 	}
-	
+
 	private Image setPicFromCard() {
 		CommandAPDU query = new CommandAPDU(GET_PIC);
 		ResponseAPDU answer = send(query);
-		
+
 		PictureConverter pc = new PictureConverter();
 		BufferedImage bi = pc.writeImage(answer.getData());
-		
+
 		return SwingFXUtils.toFXImage(bi, null);
 	}
-	
+
 	private String getFieldText(TextField textField) {
 		if (textField.getText().length() != 0) {
 			return textField.getText();
@@ -161,20 +160,20 @@ public class ManagePersonalDataController implements Initializable {
 		locationField.setPromptText("Berlin");
 		streetField.setPromptText("Musterstraße 12");
 		phonenField.setPromptText("0123456");
-		
+
 		imageV.setOnMouseClicked((MouseEvent event) -> {
-			
+
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Open Resource File");
 			file = fileChooser.showOpenDialog(imageV.getScene().getWindow());
-			
-			if(file != null){
+
+			if (file != null) {
 				PictureConverter pc = new PictureConverter();
 				Image image = SwingFXUtils.toFXImage(pc.resizeAsBufferedImage(file), null);
 				imageV.setImage(image);
 			}
-        });
- 
+		});
+
 	}
 
 	/**
