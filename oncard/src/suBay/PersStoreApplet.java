@@ -5,9 +5,9 @@ import javacard.framework.ISOException;
 import javacard.framework.ISO7816;
 import javacard.framework.APDU;
 import javacard.framework.Util;
-import javacardx.apdu.ExtendedLength;;
+import javacardx.apdu.ExtendedLength;
 
-public class PersStoreApplet extends Applet
+public class PersStoreApplet extends Applet implements ExtendedLength
 {
 	final static byte PERSONALDATA_CLA =  (byte) 0xE0;
 	
