@@ -9,6 +9,7 @@
 <CLASS name="ShortStore"/>
 <CLASS name="Ticket"/>
 <CLASS name="Trip"/>
+<CLASS name="PersDataStore"/>
 </PKG>
 <Libs/>
 </USER>
