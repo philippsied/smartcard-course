@@ -78,7 +78,7 @@ public class TicketManagerConnector extends GenericConnector implements TicketMa
     private Trip extractTrip(byte[] data) {
 	ByteBuffer bb = ByteBuffer.wrap(data);
 	short tmpTS = bb.getShort();
-	byte[] tmpDeparture = new byte[TicketManagerOncard.TICKET_DESCRIPTION_LENGTH];
+	byte[] tmpDeparture = new byte[TicketManagerOncard.TRIP_DEPARTURE_LENGTH];
 	bb.get(tmpDeparture, 0, tmpDeparture.length);
 	return new Trip(tmpTS, tmpDeparture);
     }
