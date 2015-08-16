@@ -1,10 +1,5 @@
 package clientAPI.impl;
 
-import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.ADD_CREDITS;
-import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.AID;
-import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.CHECK_BALANCE;
-import static clientAPI.impl.OncardAPI.BonusCreditStoreOncard.SUB_CREDITS;
-
 import java.nio.ByteBuffer;
 
 import javax.smartcardio.Card;
@@ -12,35 +7,30 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.ResponseAPDU;
 
 import clientAPI.BonusCreditStore;
+import clientAPI.impl.OncardAPI.BonusCreditStoreOncard;
 
-public class BonusCreditStoreConnector implements BonusCreditStore {
-	private final CardConnection mConnection;
+public final class BonusCreditStoreConnector extends GenericConnector implements BonusCreditStore {
 
-	public BonusCreditStoreConnector(Card card) {
-		mConnection = new CardConnection(card);
-	}
+    public BonusCreditStoreConnector(Card card) {
+	super(BonusCreditStoreOncard.AID, card);
+    }
 
-	public void addBonusCredits(short amount) throws CardException {
-		checkForError(mConnection.select(AID));
-		ResponseAPDU response = mConnection.sendAPDU(ADD_CREDITS, CryptoHelper.signData(amount), (short) 0);
-		checkForError(response);
-	}
+    public void addBonusCredits(short amount) throws CardException {
+	genericCommand(BonusCreditStoreOncard.ADD_CREDITS, CryptoHelper.signData(amount), (short) 0);
+    }
 
-	public void removeBonusCredits(short amount) throws CardException {
-		checkForError(mConnection.select(AID));
-		ResponseAPDU response = mConnection.sendAPDU(SUB_CREDITS, CryptoHelper.signData(amount), (short) 0);
-		checkForError(response);
-	}
+    public void removeBonusCredits(short amount) throws CardException {
+	genericCommand(BonusCreditStoreOncard.SUB_CREDITS, CryptoHelper.signData(amount), (short) 0);
+    }
 
-	public short checkBalance() throws CardException {
-		checkForError(mConnection.select(AID));
-		ResponseAPDU response = mConnection.sendAPDU(CHECK_BALANCE, null, (short) 2);
-		checkForError(response);
-		return ByteBuffer.wrap(response.getData()).getShort();
-	}
+    public short checkBalance() throws CardException {
+	ResponseAPDU response = genericCommand(BonusCreditStoreOncard.CHECK_BALANCE, null, (short) 2);
+	return ByteBuffer.wrap(response.getData()).getShort();
+    }
 
-	private void checkForError(ResponseAPDU response) throws CardException {
-		if (response.getSW() != 0x9000)
-			throw new CardException("Error");
-	}
+    @Override
+    protected void checkForError(ResponseAPDU response) throws CardException {
+	if (response.getSW() != 0x9000)
+	    throw new CardException("Error");
+    }
 }
