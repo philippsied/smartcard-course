@@ -2,12 +2,12 @@ package clientAPI.impl;
 
 import javax.smartcardio.Card;
 
-import clientAPI.CustomerData;
+import clientAPI.PersonalData;
 
-public class CustomerDataConnector implements CustomerData {
+public class PersonalDataConnector implements PersonalData {
 	private final CardConnection mConnection;
 
-	public CustomerDataConnector(Card card) {
+	public PersonalDataConnector(Card card) {
 		mConnection = new CardConnection(card);
 	}
 }

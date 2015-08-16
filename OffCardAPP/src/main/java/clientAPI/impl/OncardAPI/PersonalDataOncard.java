@@ -1,5 +1,5 @@
 package clientAPI.impl.OncardAPI;
 
-public interface CustomerDataOncard {
+public interface PersonalDataOncard {
 
 }

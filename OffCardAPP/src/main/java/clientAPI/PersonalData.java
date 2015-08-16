@@ -1,5 +1,5 @@
 package clientAPI;
 
-public interface CustomerData {
+public interface PersonalData {
 
 }

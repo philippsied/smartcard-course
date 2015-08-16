@@ -2,7 +2,7 @@ package clientAPI;
 
 import clientAPI.impl.BonusCreditStoreConnector;
 import clientAPI.impl.CryptoStoreConnector;
-import clientAPI.impl.CustomerDataConnector;
+import clientAPI.impl.PersonalDataConnector;
 import clientAPI.impl.TicketManagerConnector;
 import clientAPI.impl.WalletConnector;
 import javax.smartcardio.Card;
@@ -40,8 +40,8 @@ public class ClientFactory {
 	 * 
 	 * @return
 	 */
-	public static CustomerData getCustomerData(Card card) {
-		return new CustomerDataConnector(card);
+	public static PersonalData getCustomerData(Card card) {
+		return new PersonalDataConnector(card);
 	}
 
 	/**
