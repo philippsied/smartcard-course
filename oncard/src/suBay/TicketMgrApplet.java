@@ -117,7 +117,7 @@ public class TicketMgrApplet extends Applet {
     private void handleStartTrip(APDU apdu, byte[] buffer) {
 	checkLengthAndReceive(apdu, buffer, TRIP_SIZE);
 	if (this.start != null) {
-	    CardRuntimeException.throwIt(ERROR_PENDING_TICKET);
+	    ISOException.throwIt(ERROR_PENDING_TICKET);
 	}
 	try {
 	    final short tmpStartTS = Util.getShort(buffer, (short) ISO7816.OFFSET_CDATA);
