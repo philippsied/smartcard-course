@@ -40,7 +40,7 @@ public class ClientFactory {
 	 * 
 	 * @return
 	 */
-	public static PersonalData getCustomerData(Card card) {
+	public static PersonalData getPersonalData(Card card) {
 		return new PersonalDataConnector(card);
 	}
 
