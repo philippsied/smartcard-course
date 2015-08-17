@@ -25,6 +25,11 @@
                         <fx:include fx:id="cptab" source="cashpointTab.fxml"/>
                      </content>
                 </Tab>
+                <Tab text="Ticketautomat">
+                  <content>
+                    <fx:include fx:id="tmtab" source="ticketManagerTab.fxml"/>
+                  </content>
+                </Tab>
                 <Tab text="Personendaten">
                   <content>
                     <fx:include fx:id="pdtab" source="personalDataTab.fxml"/>
