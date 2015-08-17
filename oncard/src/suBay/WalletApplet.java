@@ -39,13 +39,13 @@ public class WalletApplet extends Applet {
 	    case INS_ADD_MONEY:
 		apdu.setIncomingAndReceive();
 		if (!moneyc.addValue(Util.getShort(buffer, (short) ISO7816.OFFSET_CDATA))) {
-		    CardRuntimeException.throwIt(ERROR_TRANS_EXCEED_MAXIMUM_BALANCE);
+		    ISOException.throwIt(ERROR_TRANS_EXCEED_MAXIMUM_BALANCE);
 		}
 		break;
 	    case INS_SUB_MONEY:
 		apdu.setIncomingAndReceive();
-		if (moneyc.subValue(Util.getShort(buffer, (short) ISO7816.OFFSET_CDATA))) {
-		    CardRuntimeException.throwIt(ERROR_INSUFFICIENT_BALANCE);
+		if (!moneyc.subValue(Util.getShort(buffer, (short) ISO7816.OFFSET_CDATA))) {
+		    ISOException.throwIt(ERROR_INSUFFICIENT_BALANCE);
 		}
 		break;
 	    default:
