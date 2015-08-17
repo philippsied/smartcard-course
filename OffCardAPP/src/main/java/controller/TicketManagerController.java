@@ -123,7 +123,6 @@ public class TicketManagerController implements Initializable {
 		    amountField.setText("Bitte Geldkarte aufladen!");
 		}
 		
-	
 	    } else {
 		System.out.println("TicketManager: No card present");
 	    }

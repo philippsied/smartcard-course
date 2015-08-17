@@ -6,7 +6,7 @@ public class AmountKV {
 	private short amountInCent;
 
 	public AmountKV(short amount) {
-		this.key = String.valueOf(amount) + "Cent";
+	    	this.key = String.format("%1$,.2f€",(float) amount/100);
 		this.amountInCent = amount;
 	}
 
