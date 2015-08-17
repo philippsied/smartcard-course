@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+@SuppressWarnings("restriction")
 public class CashpointTabController implements Initializable {
 
 	private Wallet wallet = null;

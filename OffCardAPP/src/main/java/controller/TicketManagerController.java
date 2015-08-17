@@ -107,6 +107,8 @@ public class TicketManagerController implements Initializable {
 		} else {
 		    amountField.setText("Bitte Geldkarte aufladen!");
 		}
+		curMoneyField.setText("");
+		curPointField.setText("");
 
 	    } else {
 		System.out.println("TicketManager: No card present");
@@ -146,6 +148,8 @@ public class TicketManagerController implements Initializable {
 		} else {
 		    amountField.setText("Nicht genügend Punkte!");
 		}
+		curMoneyField.setText("");
+		curPointField.setText("");
 
 	    } else {
 		System.out.println("TicketManager: No card present");
