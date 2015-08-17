@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+@SuppressWarnings("restriction")
 public class CashpointTabController implements Initializable {
 
 	private Wallet wallet = null;
@@ -49,7 +50,9 @@ public class CashpointTabController implements Initializable {
 				if (wallet == null) {
 					wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
 				}
-				displayMoneyField.setText(wallet.checkBalance() + "Cent");
+				//displayMoneyField.setText(wallet.checkBalance() + "Cent");
+				AmountKV currentMoney = new AmountKV(wallet.checkBalance());
+				displayMoneyField.setText(currentMoney.toString());
 			} else {
 				System.out.println("Cashpoint: No card present");
 			}
@@ -61,7 +64,7 @@ public class CashpointTabController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		for (short i = 5; i <= 100; i += 5) {
+		for (short i = 200; i <= 2000; i += 200) {
 			chooseMoneyCombo.getItems().add(new AmountKV(i));
 		}
 	}

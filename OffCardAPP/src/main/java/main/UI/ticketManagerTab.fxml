@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TicketManagerController">
-   <children>
+  <children>
       <GridPane hgap="45.0" maxHeight="400.0" vgap="5.0">
          <columnConstraints>
             <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -16,24 +16,51 @@
          <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="70.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label text="Ticket wählen" />
-            <Label text="Preis" GridPane.rowIndex="1" />
+            <Label text="Wählen Sie ein Ticket aus" />
+            <Label text="Ihr Preis" GridPane.rowIndex="1" />
             <TextField fx:id="amountField" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button onAction="#handleMoneyAction" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="80.0" prefWidth="110.0" text="Bezahlen mit Geldkarte" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3">
+            <Button onAction="#handleMoneyAction" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="80.0" prefWidth="110.0" text="Bezahlen mit Geldkarte" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets right="15.0" />
                </GridPane.margin>
             </Button>
-            <Button onAction="#handlePointAction" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="80.0" prefWidth="110.0" text="Bezahlen mit Bonuspunkten" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <Button onAction="#handlePointAction" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="80.0" prefWidth="110.0" text="Bezahlen mit Bonuspunkten" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="15.0" />
                </GridPane.margin>
             </Button>
             <ComboBox onAction="#handleComboAction" fx:id="ticketCombo" prefWidth="150.0" GridPane.columnIndex="1" />
+            <TextField fx:id="curMoneyField" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets right="15.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField fx:id="curPointField" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="15.0" />
+               </GridPane.margin>
+            </TextField>
+         </children>
+      </GridPane>
+      <Separator prefWidth="200.0" />
+      <GridPane hgap="10.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="252.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="348.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="ticketField" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button onAction="#handleGetTicketAction" mnemonicParsing="false" text="Aktuelles Ticket abfragen" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </children>
