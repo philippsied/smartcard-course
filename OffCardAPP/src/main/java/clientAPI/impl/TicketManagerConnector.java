@@ -31,7 +31,7 @@ public class TicketManagerConnector extends GenericConnector implements TicketMa
 
     @Override
     public Ticket getTicket() throws CardException {
-	ResponseAPDU response = genericCommand(TicketManagerOncard.EXPIRE_TICKET, null,
+	ResponseAPDU response = genericCommand(TicketManagerOncard.GET_TICKET, null,
 		TicketManagerOncard.TICKET_SIZE);
 	return extractTicket(response.getData());
     }

@@ -59,7 +59,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="ticketField" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="ticketField" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button onAction="#handleGetTicketAction" mnemonicParsing="false" text="Aktuelles Ticket abfragen" GridPane.rowIndex="1" />
          </children>
       </GridPane>
