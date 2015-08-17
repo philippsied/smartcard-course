@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+@SuppressWarnings("restriction")
 public class TicketManagerController implements Initializable {
 
     private TicketManager tmanager = null;
@@ -29,11 +30,70 @@ public class TicketManagerController implements Initializable {
 
     @FXML
     private TextField amountField;
+    
+    @FXML
+    private TextField ticketField;
+    
+    @FXML
+    private TextField curPointField;
+    
+    @FXML
+    private TextField curMoneyField;
 
     @FXML
     protected void handleComboAction() {
 	TicketEntry entry = (TicketEntry) ticketCombo.getSelectionModel().getSelectedItem();
 	amountField.setText(entry.getEurString() + " oder " + entry.getmPoints() + "Punkte");
+	
+	try {
+	    if (TerminalConnection.INSTANCE.connect()) {
+		if (wallet == null) {
+		    wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
+		}
+
+		if (bonus == null) {
+		    bonus = ClientFactory.getBonusCreditStore(TerminalConnection.INSTANCE.getCurrentCard());
+		}
+
+		short currentMoney = wallet.checkBalance();
+		short currentPoints = bonus.checkBalance();
+		
+		short afterMoney = (short) (currentMoney - entry.getCent());
+		if( afterMoney >= 0){
+		    curMoneyField.setText(getEur(currentMoney) + " -> " + getEur(afterMoney));
+		}else{
+		    curMoneyField.setText(getEur(currentMoney));
+		}
+		    
+		short afterPoints = (short) (currentPoints - entry.getmPoints());
+		if( afterPoints >= 0){
+		    curPointField.setText(currentPoints + "P -> " + afterPoints + "P");
+		}else{
+		    curPointField.setText(currentPoints + "P");
+		}
+				    
+
+	
+	    } else {
+		System.out.println("TicketManager: No card present");
+	    }
+	} catch (CardException e) {
+	    amountField.setText("ERROR!");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
     }
 
     @FXML
@@ -69,6 +129,8 @@ public class TicketManagerController implements Initializable {
 	    }
 	} catch (CardException e) {
 	    amountField.setText("ERROR!");
+	} catch (NullPointerException e){
+	    amountField.setText("Kein Ticket gewählt!");
 	}
 
     }
@@ -110,16 +172,42 @@ public class TicketManagerController implements Initializable {
 	}
 	
     }
+    
+    
+    @FXML
+    protected void handleGetTicketAction() {
+	try {
+	    if (TerminalConnection.INSTANCE.connect()) {
+
+		if (tmanager == null) {
+		    tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
+		}
+		
+		Ticket currentTicket = tmanager.getTicket();
+		ticketField.setText(currentTicket.getDescription());
+		
+	    } else {
+		System.out.println("TicketManager: No card present");
+	    }
+	} catch (CardException e) {
+	    ticketField.setText("ERROR!");
+	}
+    }
+    
+    private String getEur(short value){
+	return String.format("%1$,.2f€",(float) value/100);
+    }
+    
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-	ticketCombo.getItems().add(new TicketEntry((byte) 20, DurationUnit.MINUTE, "Kurzstrecke1", (short) 180, (short) 270));
-	ticketCombo.getItems().add(new TicketEntry((byte) 60, DurationUnit.MINUTE, "Einzelfahrt1", (short) 250, (short) 375));
+	ticketCombo.getItems().add(new TicketEntry((byte) 20, DurationUnit.MINUTE, "Kurzstrecke", (short) 180, (short) 270));
+	ticketCombo.getItems().add(new TicketEntry((byte) 60, DurationUnit.MINUTE, "Einzelfahrt", (short) 250, (short) 375));
 	ticketCombo.getItems().add(new TicketEntry((byte) 20, DurationUnit.MINUTE, "Extrakarte", (short) 180, (short) 270));
 	ticketCombo.getItems().add(new TicketEntry((byte) 1, DurationUnit.DAY, "Tageskarte", (short) 690, (short) 1035));
-	ticketCombo.getItems().add(new TicketEntry((byte) 7, DurationUnit.DAY, "Wochenkarte1", (short) 2370, (short) 3555));
-	ticketCombo.getItems().add(new TicketEntry((byte) 30, DurationUnit.DAY, "Monatskarte1", (short) 6900, (short) 10350));
+	ticketCombo.getItems().add(new TicketEntry((byte) 7, DurationUnit.DAY, "Wochenkarte", (short) 2370, (short) 3555));
+	ticketCombo.getItems().add(new TicketEntry((byte) 30, DurationUnit.DAY, "Monatskarte", (short) 6900, (short) 10350));
     }
 
 }
