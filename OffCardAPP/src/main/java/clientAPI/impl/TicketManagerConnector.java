@@ -21,7 +21,7 @@ public class TicketManagerConnector extends GenericConnector implements TicketMa
     @Override
     protected void checkForError(ResponseAPDU response) throws CardException {
 	if (response.getSW() != 0x9000)
-	    throw new CardException("Error");
+	    throw new CardException("Error: " + Integer.toHexString(response.getSW() & 0xffff));
     }
     
     @Override

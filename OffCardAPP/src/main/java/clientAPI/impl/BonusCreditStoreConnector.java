@@ -15,6 +15,12 @@ public final class BonusCreditStoreConnector extends GenericConnector implements
 	super(BonusCreditStoreOncard.AID, card);
     }
 
+    @Override
+    protected void checkForError(ResponseAPDU response) throws CardException {
+	if (response.getSW() != 0x9000)
+	    throw new CardException("Error: " + Integer.toHexString(response.getSW() & 0xffff));
+    }
+
     public void addBonusCredits(short amount) throws CardException {
 	genericCommand(BonusCreditStoreOncard.ADD_CREDITS, CryptoHelper.signData(amount), (short) 0);
     }
@@ -28,9 +34,4 @@ public final class BonusCreditStoreConnector extends GenericConnector implements
 	return ByteBuffer.wrap(response.getData()).getShort();
     }
 
-    @Override
-    protected void checkForError(ResponseAPDU response) throws CardException {
-	if (response.getSW() != 0x9000)
-	    throw new CardException("Error");
-    }
 }

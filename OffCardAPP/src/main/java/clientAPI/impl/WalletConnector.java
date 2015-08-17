@@ -18,7 +18,7 @@ public class WalletConnector extends GenericConnector implements Wallet {
     @Override
     protected void checkForError(ResponseAPDU response) throws CardException {
 	if (response.getSW() != 0x9000)
-	    throw new CardException("Error");
+	    throw new CardException("Error: " + Integer.toHexString(response.getSW() & 0xffff));
     }
 
     @Override
