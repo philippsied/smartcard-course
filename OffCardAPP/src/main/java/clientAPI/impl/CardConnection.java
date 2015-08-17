@@ -53,4 +53,31 @@ public final class CardConnection {
 	    return null;
 	}
     }
+
+    public ResponseAPDU sendAPDU(CommandHeader header, byte[] data) throws IllegalArgumentException, CardException {
+	if (header.definedLC.isPresent()) {
+	    if (header.definedLC.get() != data.length)
+		throw new IllegalArgumentException("data length deviates from defined LC");
+	}
+
+	switch (header.type) {
+
+	case NoLC_LE:
+	    if (header.definedLE.isPresent()) {
+		return sendAPDU(new CommandAPDU(header.CLA, header.INS, header.P1, header.P2, header.definedLE.get()));
+	    }
+	case NoLC_NoLE:
+	    return sendAPDU(new CommandAPDU(header.CLA, header.INS, header.P1, header.P2));
+	case LC_LE:
+	    if (header.definedLE.isPresent()) {
+		return sendAPDU(
+			new CommandAPDU(header.CLA, header.INS, header.P1, header.P2, data, header.definedLE.get()));
+	    }
+	case LC_NoLE:
+	    return sendAPDU(new CommandAPDU(header.CLA, header.INS, header.P1, header.P2, data));
+
+	default:
+	    return null;
+	}
+    }
 }

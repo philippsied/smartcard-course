@@ -22,6 +22,14 @@ public abstract class GenericConnector {
 	return response;
     }
 
+    protected ResponseAPDU genericCommand(CommandHeader command, byte[] data) throws CardException {
+	checkForError(mConnection.select(mAID));
+	ResponseAPDU response = mConnection.sendAPDU(command, data);
+	checkForError(response);
+
+	return response;
+    }
+
     protected abstract void checkForError(ResponseAPDU response) throws CardException;
 
 }
