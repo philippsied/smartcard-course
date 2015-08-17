@@ -67,7 +67,7 @@ public class Ticket {
 	bb.put((byte) (mDurationUnit.ordinal() & 0xff));
 	bb.put(mDescription.getBytes(DEFAULT_CHARSET));
 	while (bb.hasRemaining()) {
-	    bb.putChar(' ');
+	    bb.put((byte) ' ');
 	}
 	return bb.array();
     }
