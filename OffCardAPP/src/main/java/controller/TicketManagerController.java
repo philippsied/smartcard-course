@@ -1,6 +1,9 @@
 package controller;
 
 import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import javax.smartcardio.CardException;
@@ -27,6 +30,8 @@ public class TicketManagerController implements Initializable {
     @FXML
     private TextField amountField;
     @FXML
+    private TextField validityField;
+    @FXML
     private TextField ticketField;
     @FXML
     private TextField curPointField;
@@ -41,6 +46,7 @@ public class TicketManagerController implements Initializable {
 
 	    TicketEntry entry = (TicketEntry) ticketCombo.getSelectionModel().getSelectedItem();
 	    amountField.setText(entry.getEURString() + " oder " + entry.getPriceInCredits() + "Punkte");
+	    validityField.setText(entry.getDuration() + " " + entry.getDurationUnit().getChronoUnit().toString());
 	    short currentMoney = wallet.checkBalance();
 	    short currentPoints = bonus.checkBalance();
 
@@ -60,6 +66,7 @@ public class TicketManagerController implements Initializable {
 	} catch (CardException e) {
 	    System.err.println("TicketManagerController: " + e.getLocalizedMessage());
 	    amountField.setText("ERROR!");
+	    validityField.setText("");
 	}
     }
 
@@ -78,9 +85,11 @@ public class TicketManagerController implements Initializable {
 		if ((newBalance + tentry.getPriceInCent()) == balance) {
 		    tmanager.setTicket(createTicket(tentry));
 		    amountField.setText("OK!");
+		    validityField.setText("");
 		}
 	    } else {
 		amountField.setText("Bitte Geldkarte aufladen!");
+		validityField.setText("");
 	    }
 	    curMoneyField.setText("");
 	    curPointField.setText("");
@@ -88,8 +97,10 @@ public class TicketManagerController implements Initializable {
 	} catch (CardException e) {
 	    System.err.println("TicketManagerController: " + e.getLocalizedMessage());
 	    amountField.setText("ERROR!");
+	    validityField.setText("");
 	} catch (NullPointerException e) {
 	    amountField.setText("Kein Ticket gewählt!");
+	    validityField.setText("");
 	}
     }
 
@@ -108,9 +119,11 @@ public class TicketManagerController implements Initializable {
 		if ((newBalance + tentry.getPriceInCredits()) == balance) {
 		    tmanager.setTicket(createTicket(tentry));
 		    amountField.setText("OK!");
+		    validityField.setText("");
 		}
 	    } else {
 		amountField.setText("Nicht genügend Punkte!");
+		validityField.setText("");
 	    }
 	    curMoneyField.setText("");
 	    curPointField.setText("");
@@ -118,6 +131,7 @@ public class TicketManagerController implements Initializable {
 	} catch (CardException e) {
 	    System.err.println("TicketManagerController: " + e.getLocalizedMessage());
 	    amountField.setText("ERROR!");
+	    validityField.setText("");
 	}
     }
 
@@ -125,9 +139,14 @@ public class TicketManagerController implements Initializable {
     protected void handleGetTicketAction() {
 	try {
 	    TicketManager tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
-
 	    Ticket currentTicket = tmanager.getTicket();
-	    ticketField.setText(currentTicket.getDescription() + " " + currentTicket.getStartValidityTS());
+	    if (currentTicket != null) {
+		String expireTime = Instant.ofEpochSecond(currentTicket.getExpireValidityTS())
+			.atZone(ZoneOffset.ofHours(1)).format(DateTimeFormatter.RFC_1123_DATE_TIME);
+		ticketField.setText(expireTime);
+	    } else {
+		ticketField.setText("Kein Ticket vorhanden");
+	    }
 	} catch (CardException e) {
 	    System.err.println("TicketManagerController: " + e.getLocalizedMessage());
 	    ticketField.setText("ERROR!");

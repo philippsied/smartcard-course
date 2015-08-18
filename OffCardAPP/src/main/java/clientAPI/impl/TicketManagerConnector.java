@@ -1,7 +1,5 @@
 package clientAPI.impl;
 
-import java.nio.ByteBuffer;
-
 import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
 import javax.smartcardio.ResponseAPDU;
@@ -30,15 +28,15 @@ public class TicketManagerConnector extends GenericConnector implements TicketMa
 
     @Override
     public Ticket getTicket() throws CardException {
-	ResponseAPDU response = genericCommand(TicketManagerOncard.GET_TICKET, null, TicketManagerOncard.TICKET_SIZE);
-	return extractTicket(response.getData());
+	ResponseAPDU response = genericCommand(TicketManagerOncard.GET_TICKET, null, TicketManagerOncard.TICKET_MAX_SIZE);
+	return Ticket.extractTicket(response.getData());
     }
 
     @Override
     public Ticket getPreviousTicket() throws CardException {
 	ResponseAPDU response = genericCommand(TicketManagerOncard.GET_PREV_TICKET, null,
-		TicketManagerOncard.TICKET_SIZE);
-	return extractTicket(response.getData());
+		TicketManagerOncard.TICKET_MAX_SIZE);
+	return Ticket.extractTicket(response.getData());
     }
 
     @Override
@@ -53,24 +51,7 @@ public class TicketManagerConnector extends GenericConnector implements TicketMa
 
     @Override
     public Trip getTrip() throws CardException {
-	ResponseAPDU response = genericCommand(TicketManagerOncard.GET_TRIP, null, TicketManagerOncard.TRIP_SIZE);
-	return extractTrip(response.getData());
-    }
-
-    private Ticket extractTicket(byte[] data) {
-	ByteBuffer bb = ByteBuffer.wrap(data);
-	short tmpStartTS = bb.getShort();
-	short tmpExpTS = bb.getShort();
-	byte[] tmpDescription = new byte[TicketManagerOncard.TICKET_DESCRIPTION_LENGTH];
-	bb.get(tmpDescription, 0, tmpDescription.length);
-	return new Ticket(tmpStartTS, tmpExpTS, tmpDescription);
-    }
-
-    private Trip extractTrip(byte[] data) {
-	ByteBuffer bb = ByteBuffer.wrap(data);
-	short tmpTS = bb.getShort();
-	byte[] tmpDeparture = new byte[TicketManagerOncard.TRIP_DEPARTURE_LENGTH];
-	bb.get(tmpDeparture, 0, tmpDeparture.length);
-	return new Trip(tmpTS, tmpDeparture);
+	ResponseAPDU response = genericCommand(TicketManagerOncard.GET_TRIP, null, TicketManagerOncard.TRIP_MAX_SIZE);
+	return Trip.extractTrip(response.getData());
     }
 }

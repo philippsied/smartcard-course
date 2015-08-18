@@ -10,7 +10,7 @@ import clientAPI.impl.OncardAPI.TicketManagerOncard;
 
 public class Trip {
 
-    private final short mStartTS;
+    private final int mStartTS;
     private final String mDeparture;
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
@@ -20,27 +20,26 @@ public class Trip {
      * @param departure
      *            Abfahrtsbahnhof
      * @param startTS
-     *            Unix-Zeitstempel für den Zeitpunkt des Fahrtbeginnes.
-     *            Millisekunden und Sekunden werden aus Platzgründen
-     *            abgeschnitten.
+     *            Unix-Zeitstempel für den Zeitpunkt des Fahrtbeginnes. Sekunden
+     *            werden aus Platzgründen abgeschnitten.
      */
     public Trip(long startTS, String departure) {
 	// Zeitstempel in minutengenaue Speicherung überführen
-	this((short) (startTS / (60 * 1000)), departure.getBytes(DEFAULT_CHARSET));
+	this((int) (startTS / 60), departure.getBytes(DEFAULT_CHARSET));
     }
 
     /**
      * 
      * @param departure
      *            Abfahrtsbahnhof
-     * @param startTS
+     * @param startTSinMin
      *            Unix-Zeitstempel in Minuten
      */
-    public Trip(short startTS, byte[] departure) {
-	checkArgument(departure.length <= TicketManagerOncard.TRIP_DEPARTURE_LENGTH,
-		"Description too long. Max. " + TicketManagerOncard.TRIP_DEPARTURE_LENGTH + "  bytes (UTF-8)");
+    private Trip(int startTSinMin, byte[] departure) {
+	checkArgument(departure.length <= TicketManagerOncard.TRIP_DEPARTURE_MAX_LENGTH,
+		"Description too long. Max. " + TicketManagerOncard.TRIP_DEPARTURE_MAX_LENGTH + "  bytes (UTF-8)");
 	mDeparture = new String(departure).trim();
-	mStartTS = startTS;
+	mStartTS = startTSinMin;
     }
 
     public String getDeparture() {
@@ -48,17 +47,30 @@ public class Trip {
     }
 
     public long getStartTS() {
-	return mStartTS * 60 * 1000;
+	return mStartTS * 60;
     }
 
     public byte[] toByteArray() {
-	ByteBuffer bb = ByteBuffer.allocate(TicketManagerOncard.TRIP_SIZE);
-	bb.putShort(mStartTS);
+	ByteBuffer bb = ByteBuffer.allocate(TicketManagerOncard.TRIP_MAX_SIZE);
+	bb.putShort((short) ((mStartTS & 0xFFFF0000) >> 16));
+	bb.putShort((short) (mStartTS & 0xFFFF));
 	bb.put(mDeparture.getBytes(DEFAULT_CHARSET));
 	while (bb.hasRemaining()) {
-	    bb.putChar(' ');
+	    bb.put((byte) ' ');
 	}
 	return bb.array();
     }
 
+    public static Trip extractTrip(byte[] data) {
+	if (TicketManagerOncard.TRIP_MIN_SIZE <= data.length) {
+	    ByteBuffer bb = ByteBuffer.wrap(data);
+	    short tmpTShigh = bb.getShort();
+	    int tmpTS = (tmpTShigh << 16) | bb.getShort();
+	    byte[] tmpDeparture = new byte[TicketManagerOncard.TRIP_DEPARTURE_MAX_LENGTH];
+	    bb.get(tmpDeparture, 0, tmpDeparture.length);
+	    return new Trip(tmpTS, tmpDeparture);
+	} else {
+	    return null;
+	}
+    }
 }
