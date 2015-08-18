@@ -24,7 +24,7 @@
          <children>
             <Label text="Wählen Sie ein Ticket aus" />
             <Label text="Ihr Preis" GridPane.rowIndex="1" />
-            <TextField fx:id="amountField" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="amountField" alignment="CENTER" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button onAction="#handleMoneyAction" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="80.0" prefWidth="110.0" text="Bezahlen mit Geldkarte" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets right="15.0" />
