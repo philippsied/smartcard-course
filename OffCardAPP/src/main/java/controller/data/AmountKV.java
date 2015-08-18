@@ -2,21 +2,26 @@ package controller.data;
 
 public class AmountKV {
 
-	private String key;
-	private short amountInCent;
+    private final String mKey;
+    private final short mAmountInCent;
 
-	public AmountKV(short amount) {
-	    	this.key = String.format("%1$,.2f€",(float) amount/100);
-		this.amountInCent = amount;
-	}
+    public AmountKV(short amountInCent) {
+	mKey = String.format("%1$,.2f€", (float) amountInCent / 100);
+	mAmountInCent = amountInCent;
+    }
+ 
+    
+    public String getKey() {
+        return mKey;
+    }
+    
+    public short getAmountInCent() {
+        return mAmountInCent;
+    }
 
-	public short getValue() {
-		return amountInCent;
-	}
 
-	@Override
-	public String toString() {
-		return key;
-	}
-
+    @Override
+    public String toString() {
+	return "AmountKV [Key=" + mKey + ", AmountInCent=" + mAmountInCent + "]";
+    }   
 }

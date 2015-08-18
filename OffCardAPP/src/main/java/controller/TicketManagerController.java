@@ -10,9 +10,10 @@ import clientAPI.ClientFactory;
 import clientAPI.TicketManager;
 import clientAPI.Wallet;
 import clientAPI.data.Ticket;
-import clientAPI.data.Ticket.DurationUnit;
 import connection.TerminalConnection;
 import controller.data.TicketEntry;
+import controller.server.TicketServer;
+import controller.server.TimeServer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -21,184 +22,130 @@ import javafx.scene.control.TextField;
 @SuppressWarnings("restriction")
 public class TicketManagerController implements Initializable {
 
-    private TicketManager tmanager = null;
-    private Wallet wallet = null;
-    private BonusCreditStore bonus = null;
-
     @FXML
     private ComboBox<TicketEntry> ticketCombo;
-
     @FXML
     private TextField amountField;
-
     @FXML
     private TextField ticketField;
-
     @FXML
     private TextField curPointField;
-
     @FXML
     private TextField curMoneyField;
 
     @FXML
     protected void handleComboAction() {
-	TicketEntry entry = (TicketEntry) ticketCombo.getSelectionModel().getSelectedItem();
-	amountField.setText(entry.getEurString() + " oder " + entry.getmPoints() + "Punkte");
-
 	try {
-	    if (TerminalConnection.INSTANCE.connect()) {
-		if (wallet == null) {
-		    wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
-		}
+	    Wallet wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
+	    BonusCreditStore bonus = ClientFactory.getBonusCreditStore(TerminalConnection.INSTANCE.getCurrentCard());
 
-		if (bonus == null) {
-		    bonus = ClientFactory.getBonusCreditStore(TerminalConnection.INSTANCE.getCurrentCard());
-		}
+	    TicketEntry entry = (TicketEntry) ticketCombo.getSelectionModel().getSelectedItem();
+	    amountField.setText(entry.getEURString() + " oder " + entry.getPriceInCredits() + "Punkte");
+	    short currentMoney = wallet.checkBalance();
+	    short currentPoints = bonus.checkBalance();
 
-		short currentMoney = wallet.checkBalance();
-		short currentPoints = bonus.checkBalance();
-
-		short afterMoney = (short) (currentMoney - entry.getCent());
-		if (afterMoney >= 0) {
-		    curMoneyField.setText(getEur(currentMoney) + " -> " + getEur(afterMoney));
-		} else {
-		    curMoneyField.setText(getEur(currentMoney));
-		}
-
-		short afterPoints = (short) (currentPoints - entry.getmPoints());
-		if (afterPoints >= 0) {
-		    curPointField.setText(currentPoints + "P -> " + afterPoints + "P");
-		} else {
-		    curPointField.setText(currentPoints + "P");
-		}
-
+	    short afterMoney = (short) (currentMoney - entry.getPriceInCent());
+	    if (afterMoney >= 0) {
+		curMoneyField.setText(getEUR(currentMoney) + " -> " + getEUR(afterMoney));
 	    } else {
-		System.out.println("TicketManager: No card present");
+		curMoneyField.setText(getEUR(currentMoney));
+	    }
+
+	    short afterPoints = (short) (currentPoints - entry.getPriceInCredits());
+	    if (afterPoints >= 0) {
+		curPointField.setText(currentPoints + "P -> " + afterPoints + "P");
+	    } else {
+		curPointField.setText(currentPoints + "P");
 	    }
 	} catch (CardException e) {
+	    System.err.println("TicketManagerController: " + e.getLocalizedMessage());
 	    amountField.setText("ERROR!");
 	}
-
     }
 
     @FXML
     protected void handleMoneyAction() {
-
 	try {
-	    if (TerminalConnection.INSTANCE.connect()) {
-		if (wallet == null) {
-		    wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
+	    Wallet wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
+	    TicketManager tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
+
+	    TicketEntry tentry = ticketCombo.getSelectionModel().getSelectedItem();
+	    short balance = wallet.checkBalance();
+	    if (balance >= tentry.getPriceInCent()) {
+		wallet.removeMoney(tentry.getPriceInCent());
+
+		short newBalance = wallet.checkBalance();
+		if ((newBalance + tentry.getPriceInCent()) == balance) {
+		    tmanager.setTicket(createTicket(tentry));
+		    amountField.setText("OK!");
 		}
-
-		if (tmanager == null) {
-		    tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
-		}
-
-		TicketEntry tentry = ticketCombo.getSelectionModel().getSelectedItem();
-		short balance = wallet.checkBalance();
-		if (balance >= tentry.getCent()) {
-		    wallet.removeMoney(tentry.getCent());
-
-		    short newBalance = wallet.checkBalance();
-		    if ((newBalance + tentry.getCent()) == balance) {
-			tmanager.setTicket(tentry.createTicket());
-			amountField.setText("OK!");
-		    }
-		} else {
-		    amountField.setText("Bitte Geldkarte aufladen!");
-		}
-		curMoneyField.setText("");
-		curPointField.setText("");
-
 	    } else {
-		System.out.println("TicketManager: No card present");
+		amountField.setText("Bitte Geldkarte aufladen!");
 	    }
+	    curMoneyField.setText("");
+	    curPointField.setText("");
+
 	} catch (CardException e) {
+	    System.err.println("TicketManagerController: " + e.getLocalizedMessage());
 	    amountField.setText("ERROR!");
 	} catch (NullPointerException e) {
 	    amountField.setText("Kein Ticket gewählt!");
 	}
-
     }
 
     @FXML
     protected void handlePointAction() {
-
 	try {
-	    if (TerminalConnection.INSTANCE.connect()) {
-		if (bonus == null) {
-		    bonus = ClientFactory.getBonusCreditStore(TerminalConnection.INSTANCE.getCurrentCard());
+	    BonusCreditStore bonus = ClientFactory.getBonusCreditStore(TerminalConnection.INSTANCE.getCurrentCard());
+	    TicketManager tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
+
+	    TicketEntry tentry = ticketCombo.getSelectionModel().getSelectedItem();
+	    short balance = bonus.checkBalance();
+	    if (balance >= tentry.getPriceInCredits()) {
+		bonus.removeBonusCredits(tentry.getPriceInCredits());
+
+		short newBalance = bonus.checkBalance();
+		if ((newBalance + tentry.getPriceInCredits()) == balance) {
+		    tmanager.setTicket(createTicket(tentry));
+		    amountField.setText("OK!");
 		}
-
-		if (tmanager == null) {
-		    tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
-		}
-
-		TicketEntry tentry = ticketCombo.getSelectionModel().getSelectedItem();
-		short balance = bonus.checkBalance();
-		if (balance >= tentry.getmPoints()) {
-		    bonus.removeBonusCredits(tentry.getmPoints());
-
-		    short newBalance = bonus.checkBalance();
-		    if ((newBalance + tentry.getmPoints()) == balance) {
-			tmanager.setTicket(tentry.createTicket());
-			amountField.setText("OK!");
-		    }
-
-		} else {
-		    amountField.setText("Nicht genügend Punkte!");
-		}
-		curMoneyField.setText("");
-		curPointField.setText("");
-
 	    } else {
-		System.out.println("TicketManager: No card present");
+		amountField.setText("Nicht genügend Punkte!");
 	    }
+	    curMoneyField.setText("");
+	    curPointField.setText("");
+
 	} catch (CardException e) {
+	    System.err.println("TicketManagerController: " + e.getLocalizedMessage());
 	    amountField.setText("ERROR!");
 	}
-
     }
 
     @FXML
     protected void handleGetTicketAction() {
 	try {
-	    if (TerminalConnection.INSTANCE.connect()) {
+	    TicketManager tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
 
-		if (tmanager == null) {
-		    tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
-		}
-
-		Ticket currentTicket = tmanager.getTicket();
-		ticketField.setText(currentTicket.getDescription() + " " + currentTicket.getStartValidityTS());
-
-	    } else {
-		System.out.println("TicketManager: No card present");
-	    }
+	    Ticket currentTicket = tmanager.getTicket();
+	    ticketField.setText(currentTicket.getDescription() + " " + currentTicket.getStartValidityTS());
 	} catch (CardException e) {
+	    System.err.println("TicketManagerController: " + e.getLocalizedMessage());
 	    ticketField.setText("ERROR!");
 	}
     }
 
-    private String getEur(short value) {
+    public Ticket createTicket(TicketEntry entry) {
+	long ticketStart = TimeServer.getTimestamp();
+	long ticketExpire = TimeServer.getTimestampIn(entry.getDuration(), entry.getDurationUnit().getChronoUnit());
+	return new Ticket(ticketStart, ticketExpire, entry.getDescription());
+    }
+
+    private String getEUR(short value) {
 	return String.format("%1$,.2f€", (float) value / 100);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-	ticketCombo.getItems()
-		.add(new TicketEntry((byte) 20, DurationUnit.MINUTE, "Kurzstrecke", (short) 180, (short) 270));
-	ticketCombo.getItems()
-		.add(new TicketEntry((byte) 60, DurationUnit.MINUTE, "Einzelfahrt", (short) 250, (short) 375));
-	ticketCombo.getItems()
-		.add(new TicketEntry((byte) 20, DurationUnit.MINUTE, "Extrakarte", (short) 180, (short) 270));
-	ticketCombo.getItems()
-		.add(new TicketEntry((byte) 1, DurationUnit.DAY, "Tageskarte", (short) 690, (short) 1035));
-	ticketCombo.getItems()
-		.add(new TicketEntry((byte) 7, DurationUnit.DAY, "Wochenkarte", (short) 2370, (short) 3555));
-	ticketCombo.getItems()
-		.add(new TicketEntry((byte) 30, DurationUnit.DAY, "Monatskarte", (short) 6900, (short) 10350));
+	ticketCombo.getItems().addAll(TicketServer.getAvailableTickets());
     }
-
 }

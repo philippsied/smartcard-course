@@ -27,7 +27,7 @@ public interface TicketManagerOncard {
 
     public final static CommandHeader GET_TICKET = new CommandHeader((byte) 0xE0, (byte) 0x20, (byte) 0x00, (byte) 0x00, CmdType.NoLC_LE, TICKET_SIZE);
 
-    public final static CommandHeader EXPIRE_TICKET = new CommandHeader((byte) 0xE0, (byte) 0x30, (byte) 0x00, (byte) 0x00, CmdType.NoLC_NoLE);
+//    public final static CommandHeader EXPIRE_TICKET = new CommandHeader((byte) 0xE0, (byte) 0x30, (byte) 0x00, (byte) 0x00, CmdType.NoLC_NoLE);
 
     public final static CommandHeader GET_PREV_TICKET = new CommandHeader((byte) 0xE0, (byte) 0x40, (byte) 0x00, (byte) 0x00, CmdType.NoLC_LE, TICKET_SIZE);
 

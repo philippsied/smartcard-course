@@ -10,8 +10,7 @@ import clientAPI.impl.OncardAPI.TicketManagerOncard;
 
 public class Ticket {
     private final short mStartValidityTS;
-    private final byte mDuration;
-    private final DurationUnit mDurationUnit;
+    private final short mExpireValidityTS;
     private final String mDescription;
 
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
@@ -22,25 +21,25 @@ public class Ticket {
      *            Unix-Zeitstempel für den Gültigkeitsbeginn des Tickets.
      *            Millisekunden und Sekunden werden aus Platzgründen
      *            abgeschnitten.
-     * @param duration
-     *            Einheitelose Gültigkeitsdauer
-     * @param durationUnit
-     *            Einheit der Gültigkeitsdauer
+     * @param expireValidityTS
+     *            Unix-Zeitstempel für das Gültigkeitsende des Tickets.
+     *            Millisekunden und Sekunden werden aus Platzgründen
+     *            abgeschnitten.
      * @param description
      *            Kurzbeschreibung des Tickets
      */
-    public Ticket(long startValidityTS, byte duration, DurationUnit durationUnit, String description) {
+    public Ticket(long startValidityTS, long expireValidityTS, String description) {
 	// Zeitstempel in minutengenaue Speicherung überführen
-	this((short) (startValidityTS / (60 * 1000)), duration, durationUnit, description.getBytes(DEFAULT_CHARSET));
+	this((short) (startValidityTS / (60 * 1000)), (short) (expireValidityTS / (60 * 1000)),
+		description.getBytes(DEFAULT_CHARSET));
     }
 
-    public Ticket(short startValidityTS, byte duration, DurationUnit durationUnit, byte[] description) {
+    public Ticket(short startValidityTS, short expireValidityTS, byte[] description) {
 	checkArgument(description.length <= TicketManagerOncard.TICKET_DESCRIPTION_LENGTH,
 		"Description too long. Max. " + TicketManagerOncard.TICKET_DESCRIPTION_LENGTH + " bytes (UTF-8)");
 	mDescription = new String(description).trim();
 	mStartValidityTS = startValidityTS;
-	mDuration = duration;
-	mDurationUnit = durationUnit;
+	mExpireValidityTS = expireValidityTS;
 
     }
 
@@ -48,12 +47,8 @@ public class Ticket {
 	return mStartValidityTS * 60 * 1000;
     }
 
-    public byte getDuration() {
-	return mDuration;
-    }
-
-    public DurationUnit getDurationUnit() {
-	return mDurationUnit;
+    public long getExpireValidityTS() {
+	return mExpireValidityTS * 60 * 1000;
     }
 
     public String getDescription() {
@@ -63,24 +58,11 @@ public class Ticket {
     public byte[] toByteArray() {
 	ByteBuffer bb = ByteBuffer.allocate(TicketManagerOncard.TICKET_SIZE);
 	bb.putShort(mStartValidityTS);
-	bb.put(mDuration);
-	bb.put((byte) (mDurationUnit.ordinal() & 0xff));
+	bb.putShort(mExpireValidityTS);
 	bb.put(mDescription.getBytes(DEFAULT_CHARSET));
 	while (bb.hasRemaining()) {
 	    bb.put((byte) ' ');
 	}
 	return bb.array();
-    }
-
-    /**
-     * Aufzählungsdatentyp für Einheit der Gültigkeitsdauer von Fahrkarten
-     *
-     */
-    public enum DurationUnit {
-	MINUTE, HOUR, DAY, MONTH;
-
-	public static DurationUnit getByOrdinal(byte ordinal) {
-	    return values()[ordinal];
-	}
     }
 }

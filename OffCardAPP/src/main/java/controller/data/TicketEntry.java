@@ -1,57 +1,68 @@
 package controller.data;
 
-import clientAPI.data.Ticket;
-import clientAPI.data.Ticket.DurationUnit;
+import java.time.temporal.ChronoUnit;
 
 public class TicketEntry {
-    
     private final byte mDuration;
     private final DurationUnit mDurationUnit;
     private final String mDescription;
-    private final short mAmount;
-    private final short mPoints;
-    
-    public TicketEntry(byte mDuration, DurationUnit mDurationUnit, String mDescription, short mAmount, short mPoints) {
-	super();
-	this.mDuration = mDuration;
-	this.mDurationUnit = mDurationUnit;
-	this.mDescription = mDescription;
-	this.mAmount = mAmount;
-	this.mPoints = mPoints; 
+    private final short mPriceInCent;
+    private final short mPriceInCredits;
+
+    public TicketEntry(byte duration, DurationUnit durationUnit, String description, short priceInCent,
+	    short priceInCredits) {
+	mDuration = duration;
+	mDurationUnit = durationUnit;
+	mDescription = description;
+	mPriceInCent = priceInCent;
+	mPriceInCredits = priceInCredits;
     }
 
-    public byte getmDuration() {
-        return mDuration;
+    public byte getDuration() {
+	return mDuration;
     }
 
-    public DurationUnit getmDurationUnit() {
-        return mDurationUnit;
+    public DurationUnit getDurationUnit() {
+	return mDurationUnit;
     }
 
-    public String getmDescription() {
-        return mDescription;
+    public String getDescription() {
+	return mDescription;
     }
 
-    public short getCent() {
-        return mAmount;
-    }
-    
-    public String getEurString() {
-	return String.format("%1$,.2f€",(float) mAmount/100);
-    }
-    
-    public short getmPoints() {
-        return mPoints;
+    public short getPriceInCent() {
+	return mPriceInCent;
     }
 
-    public Ticket createTicket(){
-	return new Ticket(System.currentTimeMillis(), mDuration, mDurationUnit, mDescription);
+    public short getPriceInCredits() {
+	return mPriceInCredits;
+    }
+
+    public String getEURString() {
+	return String.format("%1$,.2f€", (float) mPriceInCent / 100);
     }
 
     @Override
     public String toString() {
-	//return mDescription + String.format(" (%1$,.2f€)", mAmount);
+	// return mDescription + String.format(" (%1$,.2f€)", mAmount);
 	return mDescription;
     }
-    
+
+    /**
+     * Aufzählungsdatentyp für Einheit der Gültigkeitsdauer von Fahrkarten
+     *
+     */
+    public enum DurationUnit {
+	MINUTE(ChronoUnit.MINUTES), HOUR(ChronoUnit.HOURS), DAY(ChronoUnit.DAYS), MONTH(ChronoUnit.MONTHS);
+
+	private final ChronoUnit unit;
+
+	private DurationUnit(ChronoUnit unit) {
+	    this.unit = unit;
+	}
+
+	public ChronoUnit getChronoUnit() {
+	    return this.unit;
+	}
+    }
 }

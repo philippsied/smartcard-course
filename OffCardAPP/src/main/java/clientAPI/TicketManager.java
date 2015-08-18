@@ -11,8 +11,6 @@ public interface TicketManager {
 
     public Ticket getTicket() throws CardException;
 
-    public void expireTicket() throws CardException;
-
     public Ticket getPreviousTicket() throws CardException;
 
     public void startTrip(Trip start) throws CardException;
