@@ -16,11 +16,11 @@ public class TicketMgrApplet extends Applet {
 
     final static byte TICKET_DESCRIPTION_LENGTH = (byte) 30;
     // 4 = Bytes for duration, durationUnit, startValidityTS
-    final static byte TICKET_SIZE = (byte) 4 + TICKET_DESCRIPTION_LENGTH;
+    final static byte TICKET_SIZE = (byte) 8 + TICKET_DESCRIPTION_LENGTH;
 
     final static byte TRIP_DEPARTURE_LENGTH = (byte) 30;
  // 4 = Bytes for startTS
-    final static byte TRIP_SIZE = (byte) 2 + TRIP_DEPARTURE_LENGTH;
+    final static byte TRIP_SIZE = (byte) 4 + TRIP_DEPARTURE_LENGTH;
 
     /*
      * Error-Codes
@@ -84,13 +84,14 @@ public class TicketMgrApplet extends Applet {
 
 	try {
 	    this.previousTicket = this.currentTicket;
-	    final short tmpStartValdity = Util.getShort(buffer, (short) ISO7816.OFFSET_CDATA);
-	    final byte tmpDuration = buffer[ISO7816.OFFSET_CDATA + 2];
-	    final byte tmpDurationUnit = buffer[ISO7816.OFFSET_CDATA + 3];
+	    final short tmpStartTS_h = Util.getShort(buffer, (short) ISO7816.OFFSET_CDATA);
+	    final short tmpStartTS_l = Util.getShort(buffer, (short) (ISO7816.OFFSET_CDATA + 2));
+	    final short tmpExpTS_h = Util.getShort(buffer, (short) (ISO7816.OFFSET_CDATA + 4));
+	    final short tmpExpTS_l = Util.getShort(buffer, (short) (ISO7816.OFFSET_CDATA + 6));
 	    final byte[] tmpDescription = new byte[TICKET_DESCRIPTION_LENGTH];
-	    Util.arrayCopy(buffer, (short) (ISO7816.OFFSET_CDATA + 4), tmpDescription, (short) 0,
+	    Util.arrayCopy(buffer, (short) (ISO7816.OFFSET_CDATA + 8), tmpDescription, (short) 0,
 		    (short) tmpDescription.length);
-	    this.currentTicket = new Ticket(tmpStartValdity, tmpDuration, tmpDurationUnit, tmpDescription);
+	    this.currentTicket = new Ticket(tmpStartTS_h, tmpStartTS_l, tmpExpTS_h, tmpExpTS_l, tmpDescription);
 	} catch (Exception e) {
 	    ISOException.throwIt(ISO7816.SW_UNKNOWN);
 	}
@@ -120,11 +121,12 @@ public class TicketMgrApplet extends Applet {
 	    ISOException.throwIt(ERROR_PENDING_TICKET);
 	}
 	try {
-	    final short tmpStartTS = Util.getShort(buffer, (short) ISO7816.OFFSET_CDATA);
+	    final short tmpStartTS_h = Util.getShort(buffer, (short) ISO7816.OFFSET_CDATA);
+	    final short tmpStartTS_l = Util.getShort(buffer, (short) (ISO7816.OFFSET_CDATA+2));
 	    final byte[] tmpDeparture = new byte[TRIP_DEPARTURE_LENGTH];
-	    Util.arrayCopy(buffer, (short) (ISO7816.OFFSET_CDATA + 2), tmpDeparture, (short) 0,
+	    Util.arrayCopy(buffer, (short) (ISO7816.OFFSET_CDATA + 4), tmpDeparture, (short) 0,
 		    (short) tmpDeparture.length);
-	    this.start = new Trip(tmpStartTS, tmpDeparture);
+	    this.start = new Trip(tmpStartTS_h, tmpStartTS_l, tmpDeparture);
 	} catch (Exception e) {
 	    ISOException.throwIt(ISO7816.SW_UNKNOWN);
 	}

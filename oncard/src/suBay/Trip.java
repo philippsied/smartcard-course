@@ -3,7 +3,8 @@ package suBay;
 import javacard.framework.Util;
 
 public class Trip {
-    private final short startTS;
+    private final short startTS_h;
+    private final short startTS_l;
     private final byte[] departure;
 
     /**
@@ -11,19 +12,13 @@ public class Trip {
      * @param startTS
      * @param departure
      */
-    public Trip(short startTS, byte[] departure) {
-	this.startTS = startTS;
+    public Trip(short startTS_h, short startTS_l, byte[] departure) {
+	this.startTS_h = startTS_h;
+	this.startTS_l = startTS_l;
 	this.departure = departure;
     }
 
-    /**
-     * 
-     * @return
-     */
-    public short getStartTS() {
-	return this.startTS;
-    }
-
+   
     /**
      * 
      * @return
@@ -33,7 +28,8 @@ public class Trip {
     }
 
     public void fillBuffer(byte[] buffer) {
-	Util.setShort(buffer, (short) 0, this.startTS);
-	Util.arrayCopy(this.departure, (short) 0, buffer, (short) 2, (short) this.departure.length);
+	Util.setShort(buffer, (short) 0, this.startTS_h);
+	Util.setShort(buffer, (short) 2, this.startTS_l);
+	Util.arrayCopy(this.departure, (short) 0, buffer, (short) 4, (short) this.departure.length);
     }
 }
