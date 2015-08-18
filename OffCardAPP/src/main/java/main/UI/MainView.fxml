@@ -13,7 +13,7 @@
 		<TitledPane expanded="true" animated="true" fx:id="connectionPane"
 			text="Nicht verbunden!" textFill="#eb0000" textOverrun="CLIP">
 			<content>
-				<fx:include fx:id="cp" source="connectionPane.fxml" />
+				<fx:include fx:id="cp" source="ConnectionPane.fxml" />
 			</content>
 		</TitledPane>
 	</expandedPane>
@@ -21,35 +21,35 @@
 		<TitledPane fx:id="accessControlStartPane" animated="true"
 			expanded="false" text="Zugangskontrolle (Fahrtbeginn)">
 			<content>
-				<fx:include fx:id="accessStart" source="accessControlStartPane.fxml" />
+				<fx:include fx:id="accessStart" source="AccessControlStartPane.fxml" />
 			</content>
 		</TitledPane>
 
 		<TitledPane fx:id="accessControlEndPane" animated="true"
 			expanded="false" text="Zugangskontrolle (Fahrtende)">
 			<content>
-				<fx:include fx:id="accessEnd" source="accessControlEndPane.fxml" />
+				<fx:include fx:id="accessEnd" source="AccessControlEndPane.fxml" />
 			</content>
 		</TitledPane>
 
 		<TitledPane fx:id="cashpointPane" animated="true" expanded="false"
 			text="Bankterminal">
 			<content>
-				<fx:include fx:id="wallet" source="cashpointPane.fxml" />
+				<fx:include fx:id="wallet" source="CashpointPane.fxml" />
 			</content>
 		</TitledPane>
 
 		<TitledPane fx:id="ticketPane" animated="true" expanded="false"
 			text="Ticketschalter">
 			<content>
-				<fx:include fx:id="ticketmgr" source="ticketManager.fxml" />
+				<fx:include fx:id="ticketmgr" source="TicketManagerPane.fxml" />
 			</content>
 		</TitledPane>
 
 		<TitledPane fx:id="personalPane" animated="true" expanded="false"
 			text="Abfrage Person">
 			<content>
-				<fx:include fx:id="personalQuery" source="personalData.fxml" />
+				<fx:include fx:id="personalQuery" source="QueryPersonalDataPane.fxml" />
 			</content>
 		</TitledPane>
 
@@ -61,7 +61,7 @@
 					<tabs>
 						<Tab text="Personendaten verwalten">
 							<content>
-								<fx:include fx:id="pdtab" source="managePersonalDataTab.fxml" />
+								<fx:include fx:id="pdtab" source="ManagePersonalDataTab.fxml" />
 							</content>
 						</Tab>
 					</tabs>

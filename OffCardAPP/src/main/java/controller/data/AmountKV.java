@@ -22,6 +22,6 @@ public class AmountKV {
 
     @Override
     public String toString() {
-	return "AmountKV [Key=" + mKey + ", AmountInCent=" + mAmountInCent + "]";
+	return mKey;
     }   
 }

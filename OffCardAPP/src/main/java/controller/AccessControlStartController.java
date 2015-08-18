@@ -51,8 +51,6 @@ public class AccessControlStartController {
 	    accessNote.setText(MSG_ON_ACCESS_UNKNOWN);
 	}
 	insertCard.setDisable(true);
-	accessLamp.setStyle(styleBkp.replace("-fx-background-color: #FF0000;", "-fx-background-color: #00FF00;"));
-	accessNote.setText(MSG_ON_ACCESS_GRANT);
 
 	ControllerHelper.waitBeforeTask(DELAY, new Consumer<WorkerStateEvent>() {
 	    @Override
