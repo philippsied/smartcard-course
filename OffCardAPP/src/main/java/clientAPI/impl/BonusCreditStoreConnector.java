@@ -21,15 +21,17 @@ public final class BonusCreditStoreConnector extends GenericConnector implements
 	    throw new CardException("Error: " + Integer.toHexString(response.getSW() & 0xffff));
     }
 
-    public void addBonusCredits(short amount) throws CardException {
-	genericCommand(BonusCreditStoreOncard.ADD_CREDITS, CryptoHelper.signData(amount), (short) 0);
+    public void addBonusCredits(int amount) throws CardException {
+	byte[] data = ByteBuffer.allocate(Short.BYTES).putShort((short) (0x0000FFFF & amount)).array();
+	genericCommand(BonusCreditStoreOncard.ADD_CREDITS, data, (short) 0);
     }
 
-    public void removeBonusCredits(short amount) throws CardException {
-	genericCommand(BonusCreditStoreOncard.SUB_CREDITS, CryptoHelper.signData(amount), (short) 0);
+    public void removeBonusCredits(int amount) throws CardException {
+	byte[] data = ByteBuffer.allocate(Short.BYTES).putShort((short) (0x0000FFFF & amount)).array();
+	genericCommand(BonusCreditStoreOncard.SUB_CREDITS, data, (short) 0);
     }
 
-    public short checkBalance() throws CardException {
+    public int checkBalance() throws CardException {
 	ResponseAPDU response = genericCommand(BonusCreditStoreOncard.CHECK_BALANCE, null, (short) 2);
 	return ByteBuffer.wrap(response.getData()).getShort();
     }

@@ -3,9 +3,9 @@ package controller.data;
 public class AmountKV {
 
     private final String mKey;
-    private final short mAmountInCent;
+    private final int mAmountInCent;
 
-    public AmountKV(short amountInCent) {
+    public AmountKV(int amountInCent) {
 	mKey = String.format("%1$,.2f€", (float) amountInCent / 100);
 	mAmountInCent = amountInCent;
     }
@@ -15,7 +15,7 @@ public class AmountKV {
         return mKey;
     }
     
-    public short getAmountInCent() {
+    public int getAmountInCent() {
         return mAmountInCent;
     }
 

@@ -27,7 +27,7 @@ public class CashpointController implements Initializable {
     protected void handleChargeAction() {
 	try {
 	    Wallet wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
-	    short currentvalue = chooseMoneyCombo.getSelectionModel().getSelectedItem().getAmountInCent();
+	    int currentvalue = chooseMoneyCombo.getSelectionModel().getSelectedItem().getAmountInCent();
 	    wallet.addMoney(currentvalue);
 	    displayMoneyField.setText("OK!");
 	} catch (CardException e) {

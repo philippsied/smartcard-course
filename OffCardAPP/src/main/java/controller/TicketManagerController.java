@@ -47,10 +47,10 @@ public class TicketManagerController implements Initializable {
 	    TicketEntry entry = (TicketEntry) ticketCombo.getSelectionModel().getSelectedItem();
 	    amountField.setText(entry.getEURString() + " oder " + entry.getPriceInCredits() + "Punkte");
 	    validityField.setText(entry.getDuration() + " " + entry.getDurationUnit().getChronoUnit().toString());
-	    short currentMoney = wallet.checkBalance();
-	    short currentPoints = bonus.checkBalance();
+	    int currentMoney = wallet.checkBalance();
+	    int currentPoints = bonus.checkBalance();
 
-	    short afterMoney = (short) (currentMoney - entry.getPriceInCent());
+	    int afterMoney = currentMoney - entry.getPriceInCent();
 	    if (afterMoney >= 0) {
 		curMoneyField.setText(getEUR(currentMoney) + " -> " + getEUR(afterMoney));
 	    } else {
@@ -77,11 +77,11 @@ public class TicketManagerController implements Initializable {
 	    TicketManager tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
 
 	    TicketEntry tentry = ticketCombo.getSelectionModel().getSelectedItem();
-	    short balance = wallet.checkBalance();
+	    int balance = wallet.checkBalance();
 	    if (balance >= tentry.getPriceInCent()) {
 		wallet.removeMoney(tentry.getPriceInCent());
 
-		short newBalance = wallet.checkBalance();
+		int newBalance = wallet.checkBalance();
 		if ((newBalance + tentry.getPriceInCent()) == balance) {
 		    tmanager.setTicket(createTicket(tentry));
 		    amountField.setText("OK!");
@@ -111,11 +111,11 @@ public class TicketManagerController implements Initializable {
 	    TicketManager tmanager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
 
 	    TicketEntry tentry = ticketCombo.getSelectionModel().getSelectedItem();
-	    short balance = bonus.checkBalance();
+	    int balance = bonus.checkBalance();
 	    if (balance >= tentry.getPriceInCredits()) {
 		bonus.removeBonusCredits(tentry.getPriceInCredits());
 
-		short newBalance = bonus.checkBalance();
+		int newBalance = bonus.checkBalance();
 		if ((newBalance + tentry.getPriceInCredits()) == balance) {
 		    tmanager.setTicket(createTicket(tentry));
 		    amountField.setText("OK!");
@@ -159,7 +159,7 @@ public class TicketManagerController implements Initializable {
 	return new Ticket(ticketStart, ticketExpire, entry.getDescription());
     }
 
-    private String getEUR(short value) {
+    private String getEUR(int value) {
 	return String.format("%1$,.2f€", (float) value / 100);
     }
 

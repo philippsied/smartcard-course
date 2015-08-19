@@ -22,17 +22,19 @@ public class WalletConnector extends GenericConnector implements Wallet {
     }
 
     @Override
-    public void addMoney(short amountInCent) throws CardException {
-	genericCommand(WalletOncard.ADD_MONEY, CryptoHelper.signData(amountInCent), (short) 0);
+    public void addMoney(int amountInCent) throws CardException {
+	byte[] data = ByteBuffer.allocate(Short.BYTES).putShort((short) (0x0000FFFF & amountInCent)).array();
+	genericCommand(WalletOncard.ADD_MONEY, data, (short) 0);
     }
 
     @Override
-    public void removeMoney(short amountInCent) throws CardException {
-	genericCommand(WalletOncard.SUB_MONEY, CryptoHelper.signData(amountInCent), (short) 0);
+    public void removeMoney(int amountInCent) throws CardException {
+	byte[] data = ByteBuffer.allocate(Short.BYTES).putShort((short) (0x0000FFFF & amountInCent)).array();
+	genericCommand(WalletOncard.SUB_MONEY, data, (short) 0);
     }
 
     @Override
-    public short checkBalance() throws CardException {
+    public int checkBalance() throws CardException {
 	ResponseAPDU response = genericCommand(WalletOncard.CHECK_BALANCE, null, (short) 2);
 	return ByteBuffer.wrap(response.getData()).getShort();
     }

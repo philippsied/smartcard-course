@@ -6,16 +6,16 @@ public interface Wallet {
 	/**
 	 *
 	 */
-	public void addMoney(short amountInCent) throws CardException;
+	public void addMoney(int amountInCent) throws CardException;
 
 	/**
 	 *
 	 */
-	public void removeMoney(short amountInCent) throws CardException;
+	public void removeMoney(int amountInCent) throws CardException;
 
 	/**
 	 *
 	 *@return the current balance
 	 */
-	public short checkBalance() throws CardException;
+	public int checkBalance() throws CardException;
 }
