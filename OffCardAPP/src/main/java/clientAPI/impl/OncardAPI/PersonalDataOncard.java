@@ -32,9 +32,9 @@ public interface PersonalDataOncard {
 
     public final static CommandHeader SET_PHONENR = new CommandHeader((byte) 0xE0, (byte) 0x6A, (byte) 0x00, (byte) 0x00, CmdType.LC_NoLE);
 
-    public final static CommandHeader GET_PHONEN = new CommandHeader((byte) 0xE0, (byte) 0x6B, (byte) 0x00, (byte) 0x00, CmdType.NoLC_LE);
+    public final static CommandHeader GET_PHONENR = new CommandHeader((byte) 0xE0, (byte) 0x6B, (byte) 0x00, (byte) 0x00, CmdType.NoLC_LE);
 
     public final static CommandHeader SET_PHOTO = new CommandHeader((byte) 0xE0, (byte) 0x7A, (byte) 0x00, (byte) 0x00, CmdType.LC_NoLE);
     
-    public final static CommandHeader GET_PIC = new CommandHeader((byte) 0xE0, (byte) 0x7B, (byte) 0x00, (byte) 0x00, CmdType.NoLC_LE);
+    public final static CommandHeader GET_PHOTO = new CommandHeader((byte) 0xE0, (byte) 0x7B, (byte) 0x00, (byte) 0x00, CmdType.NoLC_LE);
 }

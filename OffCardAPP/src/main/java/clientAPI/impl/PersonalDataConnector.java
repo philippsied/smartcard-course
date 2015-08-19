@@ -25,43 +25,43 @@ public class PersonalDataConnector extends GenericConnector implements PersonalD
 
     @Override
     public String getFirstName() throws CardException {
-	ResponseAPDU response = genericCommand(PersonalDataOncard.SET_FNAME, null);
+	ResponseAPDU response = genericCommand(PersonalDataOncard.GET_FNAME, null);
 	return new String(response.getData(), StandardCharsets.UTF_8);
     }
 
     @Override
     public String getSurname() throws CardException {
-	ResponseAPDU response = genericCommand(PersonalDataOncard.SET_SURNAME, null);
+	ResponseAPDU response = genericCommand(PersonalDataOncard.GET_SURNAME, null);
 	return new String(response.getData(), StandardCharsets.UTF_8);
     }
 
     @Override
     public String getBirthday() throws CardException {
-	ResponseAPDU response = genericCommand(PersonalDataOncard.SET_BDAY, null);
+	ResponseAPDU response = genericCommand(PersonalDataOncard.GET_BDAY, null);
 	return new String(response.getData(), StandardCharsets.UTF_8);
     }
 
     @Override
     public String getLocation() throws CardException {
-	ResponseAPDU response = genericCommand(PersonalDataOncard.SET_LOCATION, null);
+	ResponseAPDU response = genericCommand(PersonalDataOncard.GET_LOCATION, null);
 	return new String(response.getData(), StandardCharsets.UTF_8);
     }
 
     @Override
     public String getStreet() throws CardException {
-	ResponseAPDU response = genericCommand(PersonalDataOncard.SET_STREET, null);
+	ResponseAPDU response = genericCommand(PersonalDataOncard.GET_STREET, null);
 	return new String(response.getData(), StandardCharsets.UTF_8);
     }
 
     @Override
     public String getPhoneNumber() throws CardException {
-	ResponseAPDU response = genericCommand(PersonalDataOncard.SET_PHONENR, null);
+	ResponseAPDU response = genericCommand(PersonalDataOncard.GET_PHONENR, null);
 	return new String(response.getData(), StandardCharsets.UTF_8);
     }
 
     @Override
     public byte[] getPhoto() throws CardException {
-	ResponseAPDU response = genericCommand(PersonalDataOncard.SET_PHOTO, null);
+	ResponseAPDU response = genericCommand(PersonalDataOncard.GET_PHOTO, null);
 	return response.getData();
     }
 
