@@ -44,6 +44,8 @@ public class AccessControlStartController {
 			.setStyle(styleBkp.replace("-fx-background-color: #FF0000;", "-fx-background-color: #00FF00;"));
 		accessNote.setText(MSG_ON_ACCESS_GRANT);
 	    } else {
+		accessLamp
+			.setStyle(styleBkp.replace("-fx-background-color: #FF0000;", "-fx-background-color: #FFFF00;"));
 		accessNote.setText(MSG_ON_ACCESS_DENY);
 	    }
 	} catch (CardException e) {

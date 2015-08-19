@@ -4,10 +4,15 @@ import java.util.function.Consumer;
 
 import javax.smartcardio.CardException;
 
+import clientAPI.BonusCreditStore;
 import clientAPI.ClientFactory;
 import clientAPI.TicketManager;
+import clientAPI.Wallet;
 import clientAPI.data.Ticket;
+import clientAPI.data.Trip;
 import connection.TerminalConnection;
+import controller.server.TicketServer;
+import controller.server.TimeServer;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +24,8 @@ public class AccessControlEndController {
     public static final String DEPARTURE = "Hauptbahnhof";
 
     public static final String MSG_ON_ACCESS_GRANT = "Bitte passieren Sie die Schranke.";
-    public static final String MSG_ON_ACCESS_DENY = "Zutritt verweigert. Ungültiges Ticket";
+    public static final String MSG_ON_ACCESS_EXPIRE_TICKET_OK = "Gültigkeit des Tickets abgelaufen. Ausgleich über Kartenguthaben erfolgt.";
+    public static final String MSG_ON_ACCESS_EXPIRE_TICKET_NO = "Gültigkeit des Tickets abgelaufen. Guthaben nicht ausreichend. Laden Sie bitte mind. folgenden Betrag auf ihre Karte auf und versuchen Sie es erneut: ";
     public static final String MSG_ON_ACCESS_UNKNOWN = "Zutritt nicht möglich. Bitte wenden Sie sich an unser Personal.";
 
     public static final long DELAY = 5000;
@@ -37,9 +43,14 @@ public class AccessControlEndController {
 	final String insertBkp = insertCard.getText();
 	final String noteBkp = accessNote.getText();
 	try {
-	    TicketManager ticketManager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
-
-	    Ticket currentTicket = ticketManager.getTicket();
+	    if (checkAndGrantAccess()) {
+		accessLamp
+			.setStyle(styleBkp.replace("-fx-background-color: #FF0000;", "-fx-background-color: #00FF00;"));
+	    } else {
+		accessLamp
+			.setStyle(styleBkp.replace("-fx-background-color: #FF0000;", "-fx-background-color: #FFFF00;"));
+	    }
+	    insertCard.setDisable(true);
 	} catch (CardException e) {
 	    System.err.println("AccessControlEndController: " + e.getLocalizedMessage());
 	    accessNote.setText(MSG_ON_ACCESS_UNKNOWN);
@@ -49,10 +60,57 @@ public class AccessControlEndController {
 	    public void accept(WorkerStateEvent t) {
 		accessNote.setText(noteBkp);
 		insertCard.setText(insertBkp);
-		accessLamp.setStyle(styleBkp);
 		insertCard.setDisable(false);
+		accessLamp.setStyle(styleBkp);
 	    }
 	});
     }
 
+    private boolean checkAndGrantAccess() throws CardException {
+	TicketManager ticketManager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
+	Trip currentTrip = ticketManager.getTrip();
+	Ticket currentTicket = ticketManager.getTicket();
+	long now = TimeServer.getTimestamp();
+
+	if (currentTrip == null || currentTicket == null) {
+	    accessNote.setText(MSG_ON_ACCESS_UNKNOWN);
+	    return false;
+	}
+	if (now <= currentTicket.getExpireValidityTS()) {
+	    grantBonusCredit(TicketServer.calculateBonusCredits(currentTrip.getStartTS(), now));
+	    ticketManager.finishTrip();
+	    accessNote.setText(MSG_ON_ACCESS_GRANT);
+	    return true;
+	} else {
+	    return initiateAdditionalPayment(TicketServer.calculateCost(currentTicket.getExpireValidityTS(), now));
+	}
+    }
+
+    private boolean initiateAdditionalPayment(int debts) {
+	Wallet wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
+	try {
+	    int balance = wallet.checkBalance();
+	    if (balance >= debts) {
+		wallet.removeMoney(debts);
+		accessNote.setText(MSG_ON_ACCESS_EXPIRE_TICKET_OK);
+		return true;
+	    } else {
+		accessNote.setText(MSG_ON_ACCESS_EXPIRE_TICKET_NO + " " + (debts - balance));
+	    }
+	} catch (CardException e) {
+	    System.err.println("AccessControlEndController: " + e.getLocalizedMessage());
+	}
+	return false;
+    }
+
+    private boolean grantBonusCredit(int bonusCredits) {
+	BonusCreditStore store = ClientFactory.getBonusCreditStore(TerminalConnection.INSTANCE.getCurrentCard());
+	try {
+	    store.addBonusCredits(bonusCredits);
+	    return true;
+	} catch (CardException e) {
+	    System.err.println("AccessControlEndController: " + e.getLocalizedMessage());
+	}
+	return false;
+    }
 }

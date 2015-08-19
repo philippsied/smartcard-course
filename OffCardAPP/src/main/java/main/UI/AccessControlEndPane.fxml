@@ -11,12 +11,12 @@
 	spacing="40.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="controller.AccessControlEndController" styleClass="userTerminal">
 	<children>
-		<Label alignment="TOP_CENTER" text="Bitte Karte einlegen">
+		<Label fx:id="accessNote" alignment="TOP_CENTER" text="Bitte Karte einlegen">
 			<font>
 				<Font name="Consolas Bold" size="22.0" />
 			</font>
 		</Label>
-		<Label alignment="TOP_CENTER" blendMode="HARD_LIGHT"
+		<Label fx:id="accessLamp" alignment="TOP_CENTER" blendMode="HARD_LIGHT"
 			minWidth="100" prefHeight="27.0" prefWidth="527.0"
 			style="-fx-background-color: #FF0000; -fx-border-radius: 90 90 90 90; -fx-background-radius: 90 90 90 90;"
 			VBox.vgrow="SOMETIMES">
@@ -30,7 +30,7 @@
 				<Insets bottom="40.0" />
 			</VBox.margin>
 		</Label>
-		<Button alignment="CENTER" defaultButton="true"
+		<Button fx:id="insertCard" alignment="CENTER" defaultButton="true"
 			mnemonicParsing="false" onAction="#handleEndAction" text="Karte einlegen"
 			textAlignment="CENTER">
 			<padding>
