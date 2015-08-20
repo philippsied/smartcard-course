@@ -90,6 +90,7 @@ public class ManagePersonalDataController implements Initializable {
 
     private void setImageView(byte[] imageAsBytes) {
 	if(imageAsBytes.length == "NA".length() && new String(imageAsBytes).equals("NA")){
+	    imageV.setImage(defaultPhoto);
 	    return;
 	}
 	BufferedImage bi = (new PictureConverter()).writeImage(imageAsBytes);

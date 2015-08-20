@@ -1,14 +1,12 @@
 package clientAPI.impl;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
 import javax.smartcardio.ResponseAPDU;
 
 import clientAPI.PersonalData;
-import clientAPI.impl.OncardAPI.BonusCreditStoreOncard;
 import clientAPI.impl.OncardAPI.PersonalDataOncard;
 
 public class PersonalDataConnector extends GenericConnector implements PersonalData {
