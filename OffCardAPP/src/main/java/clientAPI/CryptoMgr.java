@@ -2,7 +2,7 @@ package clientAPI;
 
 import java.security.interfaces.RSAPrivateKey;
 
-public interface CryptoStore {
+public interface CryptoMgr {
 	/**
 	 * Before a couple of specific commands can be send to smartcard, the client
 	 * have to authenticate on the smartcard.
