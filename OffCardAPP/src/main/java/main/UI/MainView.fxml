@@ -59,6 +59,11 @@
 				<TabPane prefHeight="200.0" prefWidth="200.0"
 					tabClosingPolicy="UNAVAILABLE">
 					<tabs>
+						<Tab text="Karte einrichten">
+							<content>
+								<fx:include fx:id="cardtab" source="ManageCard.fxml" />
+							</content>
+						</Tab>
 						<Tab text="Personendaten verwalten">
 							<content>
 								<fx:include fx:id="pdtab" source="ManagePersonalDataTab.fxml" />

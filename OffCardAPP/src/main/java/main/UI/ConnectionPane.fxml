@@ -44,6 +44,14 @@
       								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
       							</HBox.margin>
       						</Button>
+      						<Button alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleAuthenticateAction" text="Authentifizieren" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+      							<font>
+      								<Font name="System Bold" size="14.0" />
+      							</font>
+      							<HBox.margin>
+      								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      							</HBox.margin>
+      						</Button>
       					</children>
       					<GridPane.margin>
       						<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

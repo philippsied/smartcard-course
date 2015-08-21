@@ -8,21 +8,21 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    public static void main(String[] args) {
+	launch(args);
+    }
 
-	@Override
-	public void start(Stage stage) throws Exception {
+    @Override
+    public void start(Stage stage) throws Exception {
 
-		Parent root = FXMLLoader.load(getClass().getResource("UI/mainView.fxml"));
+	Parent root = FXMLLoader.load(getClass().getResource("UI/mainView.fxml"));
 
-		Scene scene = new Scene(root, 800, 600);
-		stage.setMinWidth(640);
-		stage.setMinHeight(480);
-		stage.setTitle("SmartCard-Projekt");
-		stage.setScene(scene);
-		stage.show();
-	}
+	Scene scene = new Scene(root, 800, 600);
+	stage.setMinWidth(640);
+	stage.setMinHeight(480);
+	stage.setTitle("SmartCard-Projekt");
+	stage.setScene(scene);
+	stage.show();
+    }
 
 }

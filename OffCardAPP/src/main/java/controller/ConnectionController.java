@@ -7,6 +7,9 @@ import java.util.function.Consumer;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
+import clientAPI.ClientFactory;
+import clientAPI.CryptoMgr;
+import connection.LocalKeyStore;
 import connection.TerminalConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +21,6 @@ import javafx.scene.paint.Color;
 public class ConnectionController implements Initializable {
 
     private Consumer<Boolean> toggleFunc;
-
     private TitledPane parentView;
 
     @FXML
@@ -35,6 +37,26 @@ public class ConnectionController implements Initializable {
 		toggleFunc.accept(true);
 	    } else {
 		parentView.setText("ERROR!");
+		parentView.setTextFill(Color.RED);
+	    }
+	} catch (CardException e) {
+	    printError(e);
+	}
+    }
+
+    @FXML
+    protected void handleAuthenticateAction(ActionEvent event) {
+	try {
+	    if (TerminalConnection.INSTANCE.isConnected()) {
+		CryptoMgr crypto = ClientFactory.getCryptoMgr(TerminalConnection.INSTANCE.getCurrentCard());
+		crypto.authenticateConnection(LocalKeyStore.INSTANCE.getEncryptionFunc());
+
+		parentView.setText("Verbunden! (Gesichert)");
+		parentView.setTextFill(Color.GREEN);
+		toggleFunc.accept(true);
+	    } else {
+		parentView.setText("ERROR!");
+		parentView.setTextFill(Color.RED);
 	    }
 	} catch (CardException e) {
 	    printError(e);
