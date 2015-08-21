@@ -4,16 +4,17 @@ import javacard.framework.*;
 
 public class WalletApplet extends Applet {
 
-    final static byte CLA = (byte) 0xE0;
-    final static byte INS_ADD_MONEY = (byte) 0x10;
-    final static byte INS_SUB_MONEY = (byte) 0x20;
-    final static byte INS_CHECK_BALANCE = (byte) 0x30;
+    final static byte CLA = (byte)0xE0;
+    final static byte INS_ADD_MONEY = (byte)0x10;
+    final static byte INS_SUB_MONEY = (byte)0x20;
+    final static byte INS_CHECK_BALANCE = (byte)0x30;
 
     final static short START_VALUE = 0;
 
     final static short ERROR_INSUFFICIENT_BALANCE = 0x6A83;
     final static short ERROR_TRANS_EXCEED_MAXIMUM_BALANCE = 0x6A84;
 
+	private final static byte appKey = (byte)0x01; 
     private ShortStore moneyc;
 
     private WalletApplet() {
@@ -31,10 +32,11 @@ public class WalletApplet extends Applet {
 
 	byte[] buffer = apdu.getBuffer();
 	if (buffer[ISO7816.OFFSET_CLA] == CLA) {
+		CardHelper.checkPermission(appKey);
 	    switch (buffer[ISO7816.OFFSET_INS]) {
 	    case INS_CHECK_BALANCE:
-		Util.setShort(buffer, (short) 0, moneyc.getValue());
-		apdu.setOutgoingAndSend((short) 0, (short) 2);
+		Util.setShort(buffer, (short)0, moneyc.getValue());
+		apdu.setOutgoingAndSend((short)0, (short)2);
 		break;
 	    case INS_ADD_MONEY:
 		apdu.setIncomingAndReceive();

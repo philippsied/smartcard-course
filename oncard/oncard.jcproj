@@ -1,15 +1,17 @@
 <JavaCardProject name="oncard">
 <USER>
-<PKG name="suBay" aid="FD 75 42 61 79 50 6B 67" major="1" minor="0">
+<PKG name="suBay" aid="FD 75 42 61 79" major="1" minor="0">
 <APPLET aid="FD 75 42 61 79 54 69 63 6B 65 74 4D 67 72" instanceaid="" parameter="" authority="" privileges="" index="-21616" name="TicketMgrApplet"/>
 <APPLET aid="FD 75 42 61 79 57 61 6C 6C 65 74" instanceaid="" parameter="" authority="" privileges="" index="-20896" name="WalletApplet"/>
 <APPLET aid="FD 75 42 61 79 42 6F 6E 75 73 43 72 65 64 69 74" instanceaid="" parameter="" authority="" privileges="" index="-21040" name="BonusCreditApplet"/>
 <APPLET aid="FD 75 42 61 79 50 65 72 73 53 74 6F 72 65" instanceaid="" parameter="" authority="" privileges="" index="-21472" name="PersStoreApplet"/>
-<CLASS name="CryptoStore"/>
+<APPLET aid="FD 75 42 61 79 43 72 79 70 74 6F 4D 67 72" instanceaid="" parameter="" authority="" privileges="" index="-16568" name="CryptoMgrApplet"/>
+<CLASS name="CryptoMgr"/>
 <CLASS name="ShortStore"/>
 <CLASS name="Ticket"/>
 <CLASS name="Trip"/>
 <CLASS name="PersDataStore"/>
+<CLASS name="CardHelper"/>
 </PKG>
 <Libs/>
 </USER>
