@@ -21,6 +21,7 @@
 		<maven.compiler.failOnError>true</maven.compiler.failOnError>
 		<google-guava.version>18.0</google-guava.version>
 		<junit.version>4.12</junit.version>
+		<apache-commons-lang3.version>3.4</apache-commons-lang3.version>
 	</properties>
 
 	<dependencies>
@@ -34,6 +35,11 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>${google-guava.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${apache-commons-lang3.version}</version>
 		</dependency>
 	</dependencies>
 </project>

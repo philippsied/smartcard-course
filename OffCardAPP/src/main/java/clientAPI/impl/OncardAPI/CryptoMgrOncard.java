@@ -1,35 +1,50 @@
 package clientAPI.impl.OncardAPI;
 
+import clientAPI.impl.CommandHeader;
+import clientAPI.impl.CommandHeader.CmdType;
+
 public interface CryptoMgrOncard {
 
     /**
      * Oncard AID
      */
-    public static final byte[] AID = { (byte) 0xFD, 'u', 'B', 'a', 'y', 'C', 'r', 'y', 'p', 't', 'o', 'M', 'g', 'r' };
+    public final static byte[] AID = { (byte) 0xFD, 'u', 'B', 'a', 'y', 'C', 'r', 'y', 'p', 't', 'o', 'M', 'g', 'r' };
+
+    public final static short CHALLENGE_SIZE = 64;
+
+    public final static short RSA_KEY_SIZE_IN_BITS = 2048;
+
+    /*
+     * Bevor die Karte Kommandos annimmt, muss die Karte einmalig initialisiert
+     * werden. Dabei wird die Karten-ID sowie der oeffentliche Schluessel des
+     * Kartenausstellers festgesetzt.
+     */
 
     /**
-     * Authenticate on smartcard for bonus credit store. Be used to initiate the
-     * challenge-response-authentication or to send the response <br>
+     * Im Lebenszyklus der Smartcard einmalig ausfuehrbar, um Karten-ID und
+     * oeffentlichen Schlüssel der Terminals zu setzen
+     */
+    public final static CommandHeader INS_INITIALIZE = new CommandHeader((byte) 0xE0, (byte) 0xEE, (byte) 0x00,
+	    (byte) 0x00, CmdType.LC_NoLE);
+
+    public final static CommandHeader INS_GET_CARD_ID = new CommandHeader((byte) 0xE0, (byte) 0x10, (byte) 0x00,
+	    (byte) 0x00, CmdType.NoLC_LE, (short) 4);
+
+    public final static CommandHeader INS_GET_TRUSTED_PUBKEY = new CommandHeader((byte) 0xE0, (byte) 0x20, (byte) 0x00,
+	    (byte) 0x00, CmdType.NoLC_LE);
+
+    public final static CommandHeader INS_START_CHALLENGE_RESPONSE = new CommandHeader((byte) 0xE0, (byte) 0xA0,
+	    (byte) 0x00, (byte) 0x00, CmdType.NoLC_LE, (short) 64);
+
+    public final static CommandHeader INS_FINISH_CHALLENGE_RESPONSE = new CommandHeader((byte) 0xE0, (byte) 0xB0,
+	    (byte) 0x00, (byte) 0x00, CmdType.LC_NoLE);
+
+    /*
+     * Fehlercodes
      * 
-     * <pre>
-     * CLA: 0xE0 <br>
-     * INS: 0x00 <br>
-     * P1: stub for parameter. See {@link AUTHENTICATE_PARAM_STARTCHALLENGE}  or {@link AUTHENTICATE_PARAM_RESPONSE} <br>
-     * P2: 0x00 <br>
-     * LC: variable <br>
-     * Data-Stub: variable <br>
-     * </pre>
      */
-    public final static byte[] AUTHENTICATE = { (byte) 0xE0, 0x08, 0x00, 0x00 };
 
-    /**
-     * Parameter for {@link AUTHENTICATE} to indicate, that the
-     * challenge-response-authentication can begin.
-     */
-    public final static byte AUTHENTICATE_PARAM_STARTCHALLENGE = (byte) 0xFF;
-
-    /**
-     * Parameter for {@link AUTHENTICATE} to send the calculated response.
-     */
-    public final static byte AUTHENTICATE_PARAM_RESPONSE = (byte) 0xAA;
+    public final static short ERROR_CARD_NOT_INITIALIZED = 0x6A80;
+    public final static short ERROR_CARD_ALREADY_INITIALIZED = 0x6A81;
+    public final static short ERROR_INSUFFICIENT_PERMISSIONS = 0x6A6A;
 }

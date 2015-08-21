@@ -46,7 +46,7 @@ public class ClientFactory {
      * 
      * @return
      */
-    public static CryptoMgr getCryptoStore(Card card) {
+    public static CryptoMgr getCryptoMgr(Card card) {
 	return new CryptoMgrConnector(card);
     }
 }
