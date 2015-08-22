@@ -101,9 +101,9 @@ Die Geldkarte dient dem Bezahlen der Tickets und musste somit vor dem Ticketsyst
     \toprule
     \textbf{Daten} & \multicolumn{1}{c}{\textbf{Größe}} & \textbf{Funktion} & \textbf{INS} \\
     \midrule
-    Geldbetrag & \multicolumn{1}{c}{short} & aufladen & 0x10 \\
-          & \multicolumn{1}{c}{} & abbuchen & 0x20 \\
-          & \multicolumn{1}{c}{} & prüfen & 0x30 \\
+    Geldbetrag & \multicolumn{1}{c}{short} & Geld aufladen & 0x10 \\
+          & \multicolumn{1}{c}{} & Geld abbuchen & 0x20 \\
+          & \multicolumn{1}{c}{} & Geld prüfen & 0x30 \\
     \bottomrule
     \end{tabular}%
   \label{tab:walletdata}%
@@ -214,20 +214,20 @@ Die Personendaten sollen der Kontrolle der Fahrgäste dienen. Hierzu werden im V
     \toprule
     \textbf{Daten} & \multicolumn{1}{c}{\textbf{Größe (Byte)}} & \textbf{Funktion} & \textbf{INS} \\
     \midrule
-    Vorname & \multicolumn{1}{c}{10} & setzen & 0x1A \\
-          & \multicolumn{1}{c}{} & abfragen & 0x1B \\
-    Nachname & \multicolumn{1}{c}{10} & setzen & 0x2A \\
-          & \multicolumn{1}{c}{} & abfragen & 0x2B \\
-    Geburtsdatum & \multicolumn{1}{c}{10} & setzen & 0x3A \\
-          & \multicolumn{1}{c}{} & abfragen & 0x3B \\
-    Wohnort & \multicolumn{1}{c}{15} & setzen & 0x4A \\
-          & \multicolumn{1}{c}{} & abfragen & 0x4B \\
-    Straße & \multicolumn{1}{c}{25} & setzen & 0x5A \\
-          & \multicolumn{1}{c}{} & abfragen & 0x5B \\
-    Telefonnummer & \multicolumn{1}{c}{15} & setzen & 0x6A \\
-          & \multicolumn{1}{c}{} & abfragen & 0x6B \\
-    Bild  & \multicolumn{1}{c}{6750} & setzen & 0x7A \\
-          &       & abfragen & 0x7B \\
+    Vorname & \multicolumn{1}{c}{10} & Vornamen setzen & 0x1A \\
+          & \multicolumn{1}{c}{} & Vornamen abfragen & 0x1B \\
+    Nachname & \multicolumn{1}{c}{10} & Nachnamen setzen & 0x2A \\
+          & \multicolumn{1}{c}{} & Nachnamen abfragen & 0x2B \\
+    Geburtsdatum & \multicolumn{1}{c}{10} & Geburtsdatum setzen & 0x3A \\
+          & \multicolumn{1}{c}{} & Geburtsdatum abfragen & 0x3B \\
+    Wohnort & \multicolumn{1}{c}{15} & Wohnort setzen & 0x4A \\
+          & \multicolumn{1}{c}{} & Wohnort abfragen & 0x4B \\
+    Straße & \multicolumn{1}{c}{25} & Straße setzen & 0x5A \\
+          & \multicolumn{1}{c}{} & Straße abfragen & 0x5B \\
+    Telefonnummer & \multicolumn{1}{c}{15} & Telefonnummer setzen & 0x6A \\
+          & \multicolumn{1}{c}{} & Telefonnummer abfragen & 0x6B \\
+    Bild  & \multicolumn{1}{c}{6750} & Bild setzen & 0x7A \\
+          &       & Bild abfragen & 0x7B \\
     \bottomrule
     \end{tabular}%
   \label{tab:persdata}%
@@ -271,7 +271,47 @@ Das zurücksenden der Daten zur OffCard-Anwendung ist im Gegensatz stark vereinf
 
 Nach dem Betätigen des Sende-Buttons werden alle Felder, sowie das Bild einzeln zur Karte gesendet. Gleiches gilt für die Abfrage der Daten.	
 	
+\subsubsection{Bonussystem}	
 
+Das Bonussystem wurde als zweite Bezahlvariante eingeführt. Durch mehrmaliges Fahren einer gleichen Strecke, sowie durch frühzeitiges Beenden einer bezahlten Fahrstrecke, soll der Fahrgast entschädigt werden. Die Entschädigung wird in Form von Bonuspunkten gutgeschrieben. \medskip
+
+\paragraph{OnCard} Das Bonussystem ist gleich der Geldkarte aufgebaut, es unterscheidet sich somit nicht in seinen Funktionen. Auch hier finden Überprüfungen auf der Karte statt, ob ein angeforderter Betrag auf der Karte vorhanden ist und somit abgebucht werden kann. Andernfalls beendet sich der Vorgang mit einer Exception.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Klassenbyte und AID}
+    \begin{tabular}{rr}
+    \toprule
+    \textbf{CLA} & \multicolumn{1}{l}{E0} \\
+    \midrule
+    \textbf{AID} & FD 75 42 61 79 42 6F 6E 75 73 43 72 65 64 69 74 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:bonusaid}%
+\end{table}%
+
+\begin{table}[H]
+  \centering
+  \caption{Funktionsübersicht}
+    \begin{tabular}{crcc}
+    \toprule
+    \textbf{Daten} & \multicolumn{1}{c}{\textbf{Größe}} & \textbf{Funktion} & \textbf{INS} \\
+    \midrule
+    Bonuspunkte & \multicolumn{1}{c}{short} & Punkte aufladen & 0x10 \\
+          & \multicolumn{1}{c}{} & Punkte abbuchen & 0x20 \\
+          & \multicolumn{1}{c}{} & Punkte prüfen & 0x30 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:bonusdata}%
+\end{table}%
+
+\paragraph{OffCard} Eine explizite OffCard-Anwendung existiert für den Zugriff auf das Bonussystem nicht. Einzig allein die Regelung der Zutrittskontrolle schreibt die Bonuspunkte auf die Karte, sofern die Fahrt frühzeitig beendet wurde. Für jede vorzeitig beendete Minute werden 2 Punkte gutgeschrieben bis zu einem Maximalwert von 200 Punkten.
+	
 \section{Zusammenfassung \& Fazit}
+
+Alle gesteckten Ziele konnten erreicht werden. Das Ticketsystem mit allen Bezahloptionen wurde realisiert und auch das Entwerten der gekauften Karte konnte simuliert werden. Gleiches gilt für den Erhalt von Bonuspunkten, die ohne dem Simulieren der Zugangskontrolle nicht möglich wären. Selbst die Speicherung der Personaldaten inklusive des Bildes konnte ohne Schwierigkeiten integriert werden.\medskip
+
+Aufgetretene Probleme sind im Zusammenhang mit dem simulierten Kartenlesegerät aufgetreten. Nach mehrmaligen Austausch von APDUs beendete sich die Verbindung ohne Angabe von Gründen. Der Fehler ist reproduzierbar und ist immer nach der gleichen Anzahl an Befehlen sichtbar. 
+
 
 \end{document}
