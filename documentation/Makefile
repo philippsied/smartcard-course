@@ -1,4 +1,4 @@
-documentation = paper.tex
+documentation = paper
 
 default:
 	@echo "Use paper|clean"
@@ -9,12 +9,13 @@ default:
 all: paper
 
 paper:
-	pdflatex -interaction=nonstopmode $(documentation)
-	pdflatex -interaction=nonstopmode $(documentation)
-
+	pdflatex -interaction=nonstopmode $(documentation).tex
+	biber $(documentation)
+	pdflatex -interaction=nonstopmode $(documentation).tex
+	pdflatex -interaction=nonstopmode $(documentation).tex
 
 clean:
-	rm -f *.aux *.log *.aux *.out *.nav *.snm *.toc
+	rm -f *.aux *.log *.aux *.out *.nav *.snm *.toc *.blg *.bcf *.run.xml *.bbl
 
 
 

@@ -3,13 +3,13 @@
 	\usepackage[utf8]{inputenc}			% UTF-8 Kodierung
 	\usepackage[T1]{fontenc}			% Buchstabenkodierung
 	\usepackage[ngerman]{babel}			% Neue Deutsche Rechtschreibung
+	\usepackage[babel]{csquotes}
 	\usepackage{marvosym} 				% Erweitert Befehlsumfang darstellbare Symbole
 	\usepackage{pifont}				% Erweiterung der Sonderzeichen
 	\usepackage{courier}
 	\usepackage{lmodern}				% Verbessert die Darstellung der Latin -Buchstaben auf Computerbildschirmen
-	\usepackage[nohyperlinks]{acronym}
+	\usepackage{graphicx}
 	\usepackage{xcolor}
-	\usepackage{tikz}
 
 % Layout
 	\tolerance=2000 					% Toleranz für Wortzwischentäume
@@ -48,6 +48,15 @@
 
 	\setkomafont{pagenumber}{\upshape\bfseries}
 	\ohead[\textsc{Seite}\quad\textsc{\pagemark}]{\textsc{Seite}\quad\pagemark}
+	
+% Literaturverwaltung
+	\usepackage[	style=alphabetic,
+			maxnames=25,
+			minnames=2,
+			abbreviate=false,
+			date=long,
+			url=false,
+			backend=biber]{biblatex}
 
 %Tabellen
 \setlength{\tabcolsep}{10pt}
@@ -95,12 +104,8 @@
 		{~}{{\textasciitilde}}1
  }
 
-
-
-\usepackage[pdfpagelabels,hidelinks]{hyperref}
-
-
 \usepackage{float}
 \usepackage{booktabs}
 \usepackage{setspace}
+\usepackage[pdfpagelabels,hidelinks]{hyperref}
 
