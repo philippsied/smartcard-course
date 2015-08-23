@@ -16,6 +16,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+/**
+ * 
+ * Controller für die Zugangskontrolle - Einstieg
+ *
+ */
 public class AccessControlStartController {
 
     public static final String DEPARTURE = "Hauptbahnhof";
@@ -33,6 +38,13 @@ public class AccessControlStartController {
     @FXML
     private Button insertCard;
 
+    /**
+     * Simulation für den Einstieg in die Bahn ausführen - Prüft auf ein
+     * gültiges Ticket - Eine Fahrt wird auf der Karte aktiviert
+     * 
+     * @param event
+     *            - Maus-Event
+     */
     @FXML
     protected void handleStartAction(ActionEvent event) {
 	final String styleBkp = accessLamp.getStyle();
@@ -65,6 +77,12 @@ public class AccessControlStartController {
 	});
     }
 
+    /**
+     * Prüft auf Gültigkeit des Tickets
+     * 
+     * @return Ob Ticket zulässig
+     * @throws CardException
+     */
     private boolean checkAndGrantAccess() throws CardException {
 	TicketManager ticketManager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
 	Trip start = new Trip(TimeServer.getTimestamp(), DEPARTURE);

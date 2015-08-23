@@ -7,6 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TitledPane;
 
+/**
+ * 
+ * MainView für den Aufbau der UI
+ *
+ */
 public class MainViewController implements Initializable {
 
     @FXML
@@ -34,6 +39,12 @@ public class MainViewController implements Initializable {
 	setTerminalState(false);
     }
 
+    /**
+     * Initialisierung - deaktivierung aller OffCard-Anwendung. Aktivierung
+     * erfolgt erst nach dem Verbindungsaufbau zur Karte
+     * 
+     * @param isEnabled
+     */
     public void setTerminalState(boolean isEnabled) {
 	accessControlStartPane.setDisable(!isEnabled);
 	accessControlEndPane.setDisable(!isEnabled);

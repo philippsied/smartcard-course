@@ -22,6 +22,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+/**
+ * Controller für den Ticketautomaten - vereint alle Funktionen bezüglich
+ * Ticketerstellungen mit Bezahlung und Anzeige des aktuellen Tickets.
+ *
+ */
 public class TicketManagerController implements Initializable {
 
     @FXML
@@ -37,6 +42,10 @@ public class TicketManagerController implements Initializable {
     @FXML
     private TextField curMoneyField;
 
+    /**
+     * Nach Ausweil eines Eintrages aus der ComboBox, werden die dazugehörigen
+     * Informationen in der UI aktualisiert
+     */
     @FXML
     protected void handleComboAction() {
 	try {
@@ -69,6 +78,11 @@ public class TicketManagerController implements Initializable {
 	}
     }
 
+    /**
+     * Funktion für die Bezahlung mit der Geldkarte - Nach Auswahl des
+     * Bezahlbuttons wird diese Funktion aufgerufen. Bucht den entsprechenden
+     * Betrag von der Geldkarte ab und das Ticket wird erstellt.
+     */
     @FXML
     protected void handleMoneyAction() {
 	try {
@@ -103,6 +117,11 @@ public class TicketManagerController implements Initializable {
 	}
     }
 
+    /**
+     * Funktion für die Bezahlung mit dem Bonussystem - Nach Auswahl des
+     * Bezahlbuttons wird diese Funktion aufgerufen. Bucht den entsprechenden
+     * Betrag von den Bonussystem ab und das Ticket wird erstellt.
+     */
     @FXML
     protected void handlePointAction() {
 	try {
@@ -134,6 +153,10 @@ public class TicketManagerController implements Initializable {
 	}
     }
 
+    /**
+     * Funktion zum Abrufen des Aktuellen Tickets auf der Karte - wird ausgelöst
+     * durch den Button "Aktuelles Ticket abrufen"
+     */
     @FXML
     protected void handleGetTicketAction() {
 	try {
@@ -152,12 +175,26 @@ public class TicketManagerController implements Initializable {
 	}
     }
 
+    /**
+     * Erstellung des Tickets, nach ausgewähltem Eintrag in der ComboBox
+     * 
+     * @param entry
+     *            der Ticketeintrag in der ComboBox
+     * @return das erstellte Ticket
+     */
     public Ticket createTicket(TicketEntry entry) {
 	long ticketStart = TimeServer.getTimestamp();
 	long ticketExpire = TimeServer.getTimestampIn(entry.getDuration(), entry.getDurationUnit().getChronoUnit());
 	return new Ticket(ticketStart, ticketExpire, entry.getDescription());
     }
 
+    /**
+     * Formatiert den Centbetrag als Euro-String
+     * 
+     * @param value
+     *            Betrag in Cent
+     * @return Euro-String
+     */
     private String getEUR(int value) {
 	return String.format("%1$,.2f€", (float) value / 100);
     }
