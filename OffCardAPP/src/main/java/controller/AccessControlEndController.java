@@ -19,6 +19,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+/**
+ * 
+ * Controller für die Zugangskontrolle - Ausstieg
+ *
+ */
 public class AccessControlEndController {
 
     public static final String DEPARTURE = "Hauptbahnhof";
@@ -37,6 +42,14 @@ public class AccessControlEndController {
     @FXML
     private Button insertCard;
 
+    /**
+     * Simulation für den Ausstieg in die Bahn ausführen - Prüft auf ein
+     * gültiges Ticket und berechnet die Bonuspunkte für zufrühes Beenden der
+     * Fahrt
+     * 
+     * @param event
+     *            - Maus-Event
+     */
     @FXML
     protected void handleEndAction(ActionEvent event) {
 	final String styleBkp = accessLamp.getStyle();
@@ -66,6 +79,12 @@ public class AccessControlEndController {
 	});
     }
 
+    /**
+     * Prüft auf Gültigkeit des Tickets
+     * 
+     * @return Ob Ticket zulässig
+     * @throws CardException
+     */
     private boolean checkAndGrantAccess() throws CardException {
 	TicketManager ticketManager = ClientFactory.getTicketManager(TerminalConnection.INSTANCE.getCurrentCard());
 	Trip currentTrip = ticketManager.getTrip();
@@ -86,6 +105,14 @@ public class AccessControlEndController {
 	}
     }
 
+    /**
+     * Auf zusätzliches Bezahlen Prüfen - wenn Gültigkeitsdauer des Tickets
+     * überschritten
+     * 
+     * @param debts
+     *            fälliger Betrag
+     * @return ob Bezahlung erfolgreich
+     */
     private boolean initiateAdditionalPayment(int debts) {
 	Wallet wallet = ClientFactory.getWallet(TerminalConnection.INSTANCE.getCurrentCard());
 	try {
@@ -103,6 +130,13 @@ public class AccessControlEndController {
 	return false;
     }
 
+    /**
+     * Hinzufügen der Bonuspunkte auf der Karte
+     * 
+     * @param bonusCredits
+     *            die zugesprochenen Bonuspunkte
+     * @return true, wenn Punkte auf Karte eingetragen
+     */
     private boolean grantBonusCredit(int bonusCredits) {
 	BonusCreditStore store = ClientFactory.getBonusCreditStore(TerminalConnection.INSTANCE.getCurrentCard());
 	try {

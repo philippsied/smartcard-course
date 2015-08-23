@@ -14,6 +14,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+/**
+ * 
+ * Controller für den Geldautomaten - Aufladen und Anzeige der Geldkarte
+ *
+ */
 public class CashpointController implements Initializable {
 
     @FXML
@@ -22,6 +27,10 @@ public class CashpointController implements Initializable {
     @FXML
     private TextField displayMoneyField;
 
+    /**
+     * Funktion für den "Aufladen"-Button - Läd die Karte mit den Ausgewählten
+     * Betrag aus der ComboBox auf
+     */
     @FXML
     protected void handleChargeAction() {
 	try {
@@ -35,6 +44,9 @@ public class CashpointController implements Initializable {
 	}
     }
 
+    /**
+     * Liest den Betrag von der Karte
+     */
     @FXML
     protected void handleRequestAction() {
 	try {
@@ -47,6 +59,9 @@ public class CashpointController implements Initializable {
 	}
     }
 
+    /**
+     * Initialisierung - Setzen der Werte für die ComboBox
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 	chooseMoneyCombo.getItems().add(new AmountKV((short) 200));

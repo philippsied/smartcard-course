@@ -14,6 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * 
+ * Controller für die Anzeige der Personendaten
+ *
+ */
 public class QueryPersonalDataController {
 
     @FXML
@@ -31,6 +36,10 @@ public class QueryPersonalDataController {
     @FXML
     private ImageView imageV;
 
+    /**
+     * Liest die Daten von der Karte ein und setzt sie in die entsprechenden
+     * Felder in der View - Wird durch den "Abfrage"-Button ausgelöst
+     */
     @FXML
     protected void handleGetAction() {
 	try {
@@ -48,6 +57,14 @@ public class QueryPersonalDataController {
 	}
     }
 
+    /**
+     * Konvertiert das Byte-Array von der Karte in ein Bild für die ImageView in
+     * der UI
+     * 
+     * @param photo
+     *            das Byte-Array von der Karte
+     * @return die Image für die ImageView
+     */
     private Image convertToImage(byte[] photo) {
 	PictureConverter pc = new PictureConverter();
 	BufferedImage bi = pc.writeImage(photo);

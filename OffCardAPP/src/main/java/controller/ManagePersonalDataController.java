@@ -25,11 +25,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
+/**
+ * 
+ * Controller für Verwaltung der Personendaten - Eintragen der Daten und dem
+ * Bild
+ *
+ */
 public class ManagePersonalDataController implements Initializable {
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private File file = null;
-    private Image defaultPhoto = null; 
+    private Image defaultPhoto = null;
 
     @FXML
     private TextField fnameField;
@@ -46,6 +52,10 @@ public class ManagePersonalDataController implements Initializable {
     @FXML
     private ImageView imageV;
 
+    /**
+     * Einträge aus den Feldern auf die Karte übertragen - wird ausgeführt durch
+     * den "Setzen"-Button
+     */
     @FXML
     protected void handleSetAction() {
 	try {
@@ -63,6 +73,10 @@ public class ManagePersonalDataController implements Initializable {
 	}
     }
 
+    /**
+     * Liest die Daten von der Karte ein und setzt sie in die entsprechenden
+     * Felder in der View - Wird durch den "Abfrage"-Button ausgelöst
+     */
     @FXML
     protected void handleGetAction() {
 	try {
@@ -80,6 +94,11 @@ public class ManagePersonalDataController implements Initializable {
 	}
     }
 
+    /**
+     * Ausgewähltes Bild aus Datei lesen und als Byte-Array zurückgeben
+     * 
+     * @return Bild als Byte-Array
+     */
     private byte[] getImageView() {
 	if (file != null) {
 	    return (new PictureConverter()).resizeAsByteArray(file);
@@ -88,8 +107,14 @@ public class ManagePersonalDataController implements Initializable {
 	}
     }
 
+    /**
+     * Setzt das Bild der ImageView aus einem Byte-Array
+     * 
+     * @param imageAsBytes
+     *            Bild als Byte-Array
+     */
     private void setImageView(byte[] imageAsBytes) {
-	if(imageAsBytes.length == "NA".length() && new String(imageAsBytes).equals("NA")){
+	if (imageAsBytes.length == "NA".length() && new String(imageAsBytes).equals("NA")) {
 	    imageV.setImage(defaultPhoto);
 	    return;
 	}
@@ -97,10 +122,23 @@ public class ManagePersonalDataController implements Initializable {
 	imageV.setImage(SwingFXUtils.toFXImage(bi, null));
     }
 
+    /**
+     * Liest ein TextField ein und gibt den Text als String zuürck
+     * 
+     * @param textField
+     *            das TextField
+     * @return Inhalt des TextFields als String
+     */
     private String getFieldText(TextField textField) {
 	return (textField.getText().length() != 0) ? textField.getText() : "";
     }
 
+    /**
+     * Setzt den DatePicker aus einem String
+     * 
+     * @param date
+     *            Datum als String
+     */
     private void setDatePickerText(String date) {
 	try {
 	    if (date != null) {
@@ -113,6 +151,11 @@ public class ManagePersonalDataController implements Initializable {
 	}
     }
 
+    /**
+     * Liest den DatePicker ein und gibt das Datum als String zurück
+     * 
+     * @return Das Datum als String
+     */
     private String getDatePickerText() {
 	if (bdayField.getValue() != null) {
 	    return dateTimeFormatter.format(bdayField.getValue());
@@ -121,6 +164,9 @@ public class ManagePersonalDataController implements Initializable {
 	}
     }
 
+    /**
+     * Initialisierung der UI - setzen von default-Werten
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 	surnameField.setPromptText("Mustermann");
@@ -140,11 +186,11 @@ public class ManagePersonalDataController implements Initializable {
 		imageV.setImage(image);
 	    }
 	});
-	try{
+	try {
 	    String url = new URL(location, "style/unknown.png").toExternalForm();
-	defaultPhoto = new Image(url);
-	}catch(MalformedURLException e){
-	   System.err.println("ERROR: Set default photo");
+	    defaultPhoto = new Image(url);
+	} catch (MalformedURLException e) {
+	    System.err.println("ERROR: Set default photo");
 	}
     }
 }

@@ -18,6 +18,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TitledPane;
 import javafx.scene.paint.Color;
 
+/**
+ * 
+ * Controller für den Verbindungsaufbau zur Karte - Auwahl des Kartenlesegerätes
+ * und Verbindungsaufbau
+ *
+ */
 public class ConnectionController implements Initializable {
 
     private Consumer<Boolean> toggleFunc;
@@ -26,6 +32,12 @@ public class ConnectionController implements Initializable {
     @FXML
     private ComboBox<CardTerminal> terminalCombo;
 
+    /**
+     * Verbindungsaufbau über den "Verbinden"-Button
+     * 
+     * @param event
+     *            Event der Mausaction
+     */
     @FXML
     protected void handleConnectAction(ActionEvent event) {
 	try {
@@ -44,6 +56,12 @@ public class ConnectionController implements Initializable {
 	}
     }
 
+    /**
+     * Authentifizierung der Verbindung
+     * 
+     * @param event
+     *            Event der Mausaction
+     */
     @FXML
     protected void handleAuthenticateAction(ActionEvent event) {
 	try {
@@ -63,6 +81,12 @@ public class ConnectionController implements Initializable {
 	}
     }
 
+    /**
+     * Abbau der Verbindung über den "Trennen"-Button
+     * 
+     * @param event
+     *            Event der Mausaction
+     */
     @FXML
     protected void handleDisconnectAction(ActionEvent event) {
 	try {
@@ -76,6 +100,9 @@ public class ConnectionController implements Initializable {
 	}
     }
 
+    /**
+     * Laden der Vorhandenen Terminals beim öffnen der ComboBox
+     */
     @FXML
     protected void handleComboShowing() {
 	try {
@@ -93,20 +120,42 @@ public class ConnectionController implements Initializable {
 	// Nothing To do
     }
 
+    /**
+     * Dient dem Erhalt des Parent-Controller
+     * 
+     * @param parentView
+     *            der Parent-Controller
+     */
     public void setParentView(TitledPane parentView) {
 	this.parentView = parentView;
     }
 
+    /**
+     * Setzen der Aktivität für das Aktivieren und Deaktivieren der
+     * OffCard-Anwendungen je nach Verbindungszustand
+     * 
+     * @param func
+     *            Die Funktion für das Aktivieren/Deaktivieren
+     */
     public void setToggleFunction(Consumer<Boolean> func) {
 	this.toggleFunc = func;
     }
 
+    /**
+     * Ausgabe der Fehler
+     * 
+     * @param e
+     *            die Exception
+     */
     private void printError(Throwable e) {
 	System.err.println("ConnectionController: " + e.getLocalizedMessage());
 	parentView.setText("ERROR!");
 	parentView.setTextFill(Color.RED);
     }
 
+    /**
+     * Initialsierung - erstmaliges setzen der Terminals
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 	try {
