@@ -7,8 +7,22 @@ import javacard.framework.APDU;
 import javacard.framework.Util;
 import javacardx.apdu.ExtendedLength;
 
-public class PersStoreApplet extends Applet implements ExtendedLength
-{
+/**
+ * Applet fuer die Personaldaten-Verwaltung
+ *
+ */
+public class PersStoreApplet extends Applet implements ExtendedLength {
+	
+	/* -------------------- Konstanten ------------------------------------ */
+	
+	/**
+	 * Interner Schluessel fuer Berechtigungspruefung
+	 */
+	private final static byte appKey = (byte)0x04; 
+	
+	
+	/* -------------------- Anweisungen ------------------------------------ */
+	
 	final static byte PERSONALDATA_CLA =  (byte) 0xE0;
 	
 	final static byte PERSONALDATA_INS_SET_FIRSTNAME = (byte) 0x1a;
@@ -26,27 +40,36 @@ public class PersStoreApplet extends Applet implements ExtendedLength
 	final static byte PERSONALDATA_INS_SET_PIC = (byte) 0x7a;
 	final static byte PERSONALDATA_INS_GET_PIC  = (byte) 0x7b;
 
+	
+	/* -------------------- Membervariablen ------------------------------------ */
+	
+	/**
+     * Personaldatenspeicher
+     */
 	static PersDataStore personaldata;
-
-	public static void install(byte[] bArray, short bOffset, byte bLength) 
-	{
+	
+	
+	/* -------------------- Methoden ------------------------------------ */
+	
+	// override
+	public static void install(byte[] bArray, short bOffset, byte bLength) {
 		new PersStoreApplet().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
 		personaldata = new PersDataStore();
 	}
-
-	public void process(APDU apdu){
+	
+	// override
+	public void process(APDU apdu) {
 		if (selectingApplet()){
 			return;
 		}
-
+		CardHelper.checkPermission(appKey);
+		
 		byte[] buf = apdu.getBuffer();
-		short lc = (short)(buf[ISO7816.OFFSET_LC] & (short) 0x00FF);
-		switch (buf[ISO7816.OFFSET_INS]){
-			
+		short lc = (short)(buf[ISO7816.OFFSET_LC] & (short)0x00FF);
+		switch (buf[ISO7816.OFFSET_INS]){	
 		case (byte) PERSONALDATA_INS_SET_FIRSTNAME:
 			trimAndSet(buf, personaldata.getFName());
 			break;
-			
 		case (byte) PERSONALDATA_INS_GET_FIRSTNAME:
 			send(apdu, personaldata.getFName());
 			break;
@@ -62,7 +85,6 @@ public class PersStoreApplet extends Applet implements ExtendedLength
 		case (byte) PERSONALDATA_INS_SET_BDAY:
 			trimAndSet(buf, personaldata.getBDay());
 			break;
-			
 		case (byte) PERSONALDATA_INS_GET_BDAY:
 			send(apdu, personaldata.getBDay());
 			break;
@@ -90,9 +112,7 @@ public class PersStoreApplet extends Applet implements ExtendedLength
 		case (byte) PERSONALDATA_INS_GET_PHONE:
 			send(apdu, personaldata.getPhoneNumber());
 			break;
-			
-			
-			
+	
 		case (byte) PERSONALDATA_INS_SET_PIC:
 			
 			short read = apdu.setIncomingAndReceive();
@@ -115,20 +135,17 @@ public class PersStoreApplet extends Applet implements ExtendedLength
 		default:
 			ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
 		}
-		
-		
 	}
 
-	public void trimAndSet(byte[] src, byte[] des){
+	public void trimAndSet(byte[] src, byte[] des) {
 		short length = (short) des.length;
 		Util.arrayCopy(src, (short)((ISO7816.OFFSET_CDATA) & 0x00FF), des, (short) 0, length);
 	}
 	
-	public void send(APDU apdu, byte[] toSend){
+	public void send(APDU apdu, byte[] toSend) {
 		short length = (short) toSend.length;
 		apdu.setOutgoing();
 		apdu.setOutgoingLength(length);   
 		apdu.sendBytesLong(toSend, (short)0, length);
 	}
-
 }
