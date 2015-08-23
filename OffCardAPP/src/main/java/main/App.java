@@ -14,9 +14,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-	Parent root = FXMLLoader.load(getClass().getResource("UI/mainView.fxml"));
-
+	Parent root = FXMLLoader.load(getClass().getResource("UI/MainView.fxml"));
 	Scene scene = new Scene(root, 800, 600);
 	stage.setMinWidth(640);
 	stage.setMinHeight(480);
@@ -24,5 +22,4 @@ public class App extends Application {
 	stage.setScene(scene);
 	stage.show();
     }
-
 }

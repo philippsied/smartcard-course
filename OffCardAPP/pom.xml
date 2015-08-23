@@ -4,7 +4,7 @@
 
 	<groupId>SmartCardProjekt</groupId>
 	<artifactId>OffCardAPP</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>release</version>
 	<packaging>jar</packaging>
 
 	<name>OffCardAPP</name>
@@ -44,6 +44,16 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/java</directory>
+				<includes>
+					<include>**/*.fxml</include>
+					<include>**/*.css</include>
+					<include>**/*.png</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -61,7 +71,9 @@
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>main.App</mainClass>
+									<manifestEntries>
+										<Main-Class>main.App</Main-Class>
+									</manifestEntries>
 								</transformer>
 							</transformers>
 						</configuration>
