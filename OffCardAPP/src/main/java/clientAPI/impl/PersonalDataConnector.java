@@ -9,6 +9,10 @@ import javax.smartcardio.ResponseAPDU;
 import clientAPI.PersonalData;
 import clientAPI.impl.OncardAPI.PersonalDataOncard;
 
+/**
+ * Implementierung von {@code clientAPI.PersonalData}
+ *
+ */
 public class PersonalDataConnector extends GenericConnector implements PersonalData {
 
     public PersonalDataConnector(Card card) {

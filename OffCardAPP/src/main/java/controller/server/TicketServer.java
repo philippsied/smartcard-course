@@ -6,16 +6,51 @@ import java.util.List;
 import controller.data.TicketEntry;
 import controller.data.TicketEntry.DurationUnit;
 
+/**
+ * Klasse zur Simulation eines Ticketservers zur Abfrage von Preisen,
+ * Bonuspunkten und Fahrkarten.
+ * 
+ * @author player
+ *
+ */
 public class TicketServer {
 
+    /**
+     * Nachzahlungskosten pro Minute in Euro-Cent
+     */
     private static final int costPerMinuteInCent = 15;
+
+    /**
+     * Höhe der Nachzahlungspauschale
+     */
     private static final int fixedCost = 700;
+
+    /**
+     * Schwellwert für Nachzahlungspauschale
+     */
     private static final int thresholdForFixedCost = 45;
 
+    /**
+     * Bonuspunkte je gefahrener Minute
+     */
     private static final int bonusCreditsPerMinute = 2;
+
+    /**
+     * Höhe der Bonuspunkte-Pauschale
+     */
     private static final int fixedBonusCredit = 200;
+
+    /**
+     * Schwellwert für Bonuspunkte-Pauschale
+     */
     private static final int thresholdForFixedBonusCredit = 90;
 
+    /**
+     * Liefert die aktuell angebotenen Tickets einschließlich Preis,
+     * Gültigkeitsdauer und Bezeichnung
+     * 
+     * @return Liste mit erwerbbaren Tickets
+     */
     public static List<TicketEntry> getAvailableTickets() {
 	ArrayList<TicketEntry> ticketList = new ArrayList<TicketEntry>();
 	ticketList.add(new TicketEntry((byte) 20, DurationUnit.MINUTE, "Kurzstrecke", (short) 180, (short) 270));
@@ -28,10 +63,25 @@ public class TicketServer {
 	return ticketList;
     }
 
+    /**
+     * Berechne die Nachzahlungskosten
+     * 
+     * @param startTS
+     * @param endTS
+     * @return Resultierende Nachzahlungskosten
+     */
     public static int calculateCost(long startTS, long endTS) {
 	return calculateAmountbyDiff(startTS, endTS, costPerMinuteInCent, thresholdForFixedCost, fixedCost);
     }
 
+    /**
+     * Berechne die Bonuspunkte
+     * 
+     * @param startTS
+     * @param endTS
+     * @return Resultierende Bonuspunkte
+     * 
+     */
     public static int calculateBonusCredits(long startTS, long endTS) {
 	return calculateAmountbyDiff(startTS, endTS, bonusCreditsPerMinute, thresholdForFixedBonusCredit,
 		fixedBonusCredit);

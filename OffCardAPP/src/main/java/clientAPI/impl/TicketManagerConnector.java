@@ -9,6 +9,10 @@ import clientAPI.data.Ticket;
 import clientAPI.data.Trip;
 import clientAPI.impl.OncardAPI.TicketManagerOncard;
 
+/**
+ * Implementierung von {@code clientAPI.TicketManager}
+ *
+ */
 public class TicketManagerConnector extends GenericConnector implements TicketManager {
 
     public TicketManagerConnector(Card card) {
@@ -28,7 +32,8 @@ public class TicketManagerConnector extends GenericConnector implements TicketMa
 
     @Override
     public Ticket getTicket() throws CardException {
-	ResponseAPDU response = genericCommand(TicketManagerOncard.GET_TICKET, null, TicketManagerOncard.TICKET_MAX_SIZE);
+	ResponseAPDU response = genericCommand(TicketManagerOncard.GET_TICKET, null,
+		TicketManagerOncard.TICKET_MAX_SIZE);
 	return Ticket.extractTicket(response.getData());
     }
 

@@ -6,18 +6,41 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
+/**
+ * Klasse zur Kapselung der direkten Kommunikation mit der Smartcard.
+ *
+ */
 public final class CardConnection {
 
+    /**
+     * Offene Verbindung zur Smartcard
+     */
     private CardChannel mChannel;
 
     public CardConnection(Card card) {
 	mChannel = card.getBasicChannel();
     }
 
+    /**
+     * Sende Select-Kommando an Applet mit angegebener AID
+     * 
+     * @param aid
+     *            AID des Applets
+     * @return Antwort
+     * @throws CardException
+     */
     public ResponseAPDU select(byte[] aid) throws CardException {
 	return sendAPDU(new CommandAPDU(0x00, 0xA4, 0x04, 0x00, aid));
     }
 
+    /**
+     * Sende APDU mit direkter Angabe des Befehles.
+     * 
+     * @param cmd
+     *            Befehl
+     * @return Antwort
+     * @throws CardException
+     */
     public ResponseAPDU sendAPDU(CommandAPDU cmd) throws CardException {
 	try {
 	    return mChannel.transmit(cmd);
@@ -29,6 +52,19 @@ public final class CardConnection {
 
     }
 
+    /**
+     * Sende APDU, unter Angabe von LE, mit aus dem Header abgeleitetem Befehl.
+     * 
+     * @param header
+     *            Befehls-Header
+     * @param data
+     *            Zu sendende Daten
+     * @param expectedResponseLength
+     *            Erwartete Länge
+     * @return Antwort
+     * @throws IllegalArgumentException
+     * @throws CardException
+     */
     public ResponseAPDU sendAPDU(CommandHeader header, byte[] data, short expectedResponseLength)
 	    throws IllegalArgumentException, CardException {
 	if (header.definedLC.isPresent()) {
@@ -54,6 +90,17 @@ public final class CardConnection {
 	}
     }
 
+    /**
+     * Sende APDU mit aus dem Header abgeleitetem Befehl.
+     * 
+     * @param header
+     *            Befehls-Header
+     * @param data
+     *            Zu sendende Daten
+     * @return Antwort
+     * @throws IllegalArgumentException
+     * @throws CardException
+     */
     public ResponseAPDU sendAPDU(CommandHeader header, byte[] data) throws IllegalArgumentException, CardException {
 	if (header.definedLC.isPresent()) {
 	    if (header.definedLC.get() != data.length)
@@ -61,7 +108,6 @@ public final class CardConnection {
 	}
 
 	switch (header.type) {
-
 	case NoLC_LE:
 	    if (header.definedLE.isPresent()) {
 		return sendAPDU(new CommandAPDU(header.CLA, header.INS, header.P1, header.P2, header.definedLE.get()));
@@ -75,7 +121,6 @@ public final class CardConnection {
 	    }
 	case LC_NoLE:
 	    return sendAPDU(new CommandAPDU(header.CLA, header.INS, header.P1, header.P2, data));
-
 	default:
 	    return null;
 	}

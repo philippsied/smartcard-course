@@ -9,6 +9,10 @@ import javax.smartcardio.ResponseAPDU;
 import clientAPI.BonusCreditStore;
 import clientAPI.impl.OncardAPI.BonusCreditStoreOncard;
 
+/**
+ * Implementierung von {@code clientAPI.BonusCreditStore}
+ *
+ */
 public final class BonusCreditStoreConnector extends GenericConnector implements BonusCreditStore {
 
     public BonusCreditStoreConnector(Card card) {
@@ -35,5 +39,4 @@ public final class BonusCreditStoreConnector extends GenericConnector implements
 	ResponseAPDU response = genericCommand(BonusCreditStoreOncard.CHECK_BALANCE, null, (short) 2);
 	return ByteBuffer.wrap(response.getData()).getShort();
     }
-
 }

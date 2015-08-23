@@ -3,6 +3,10 @@ package controller.server;
 import java.time.Instant;
 import java.time.temporal.TemporalUnit;
 
+/**
+ * Klasse zur Simulation eines Zeitservers.
+ *
+ */
 public class TimeServer {
 
     /**

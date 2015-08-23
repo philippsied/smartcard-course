@@ -18,11 +18,21 @@ import clientAPI.CryptoMgr;
 import clientAPI.data.EncryptFunction;
 import clientAPI.impl.OncardAPI.CryptoMgrOncard;
 
+/**
+ * Implementierung von {@code clientAPI.CryptoMgr}
+ *
+ */
 public class CryptoMgrConnector extends GenericConnector implements CryptoMgr {
 
     public CryptoMgrConnector(Card card) {
 	super(CryptoMgrOncard.AID, card);
 
+    }
+
+    @Override
+    protected void checkForError(ResponseAPDU response) throws CardException {
+	if (response.getSW() != 0x9000)
+	    throw new CardException("Error: " + Integer.toHexString(response.getSW() & 0xffff));
     }
 
     @Override
@@ -77,12 +87,6 @@ public class CryptoMgrConnector extends GenericConnector implements CryptoMgr {
 	    e.printStackTrace();
 	}
 	return null;
-    }
-
-    @Override
-    protected void checkForError(ResponseAPDU response) throws CardException {
-	if (response.getSW() != 0x9000)
-	    throw new CardException("Error: " + Integer.toHexString(response.getSW() & 0xffff));
     }
 
     private byte[] convertToByteArray(BigInteger bigInt) {

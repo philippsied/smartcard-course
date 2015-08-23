@@ -9,6 +9,10 @@ import javax.smartcardio.ResponseAPDU;
 import clientAPI.Wallet;
 import clientAPI.impl.OncardAPI.WalletOncard;
 
+/**
+ * Implementierung von {@code clientAPI.Wallet}
+ *
+ */
 public class WalletConnector extends GenericConnector implements Wallet {
 
     public WalletConnector(Card card) {

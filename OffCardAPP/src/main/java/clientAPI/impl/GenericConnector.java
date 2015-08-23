@@ -4,8 +4,24 @@ import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
 import javax.smartcardio.ResponseAPDU;
 
+/**
+ * Abstrakte Klasse zur Bereitstellung des generellen Kommunikationsablaufes mit
+ * der Smartcard.
+ * <p>
+ * Spezialisierungen dieser Klasse müssen {@code checkForError()} implementieren
+ * und können über {@code genericCommand()} Befehle an das Applet senden.
+ *
+ */
 public abstract class GenericConnector {
+
+    /**
+     * AID des Applets, mit dem kommuniziert werden soll.
+     */
     private final byte[] mAID;
+
+    /**
+     * Bestehende Verbindung zur Karte
+     */
     protected final CardConnection mConnection;
 
     public GenericConnector(byte[] AID, Card card) {

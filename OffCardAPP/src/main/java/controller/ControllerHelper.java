@@ -6,8 +6,20 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 
+/**
+ * Helperklasse zur Bereitstellung von Hilfsfunktionen für die Controller.
+ *
+ */
 public class ControllerHelper {
 
+    /**
+     * Starten den angegebenen Task erst nach der angegebene Zeit.
+     * 
+     * @param timeToWait
+     *            Wartezeit bis zur Ausführung des Task
+     * @param task
+     *            Auszuführende Aufgabe
+     */
     public static void waitBeforeTask(final long timeToWait, final Consumer<WorkerStateEvent> task) {
 	Task<Void> sleeper = new Task<Void>() {
 	    @Override

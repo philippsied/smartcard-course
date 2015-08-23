@@ -1,7 +1,5 @@
 package controller;
 
-import java.io.IOException;
-
 import javax.smartcardio.CardException;
 
 import clientAPI.ClientFactory;
@@ -12,6 +10,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+/**
+ * Controller für die Einrichtung der Karte.
+ *
+ */
 public class ManageCardController{
 
     @FXML
