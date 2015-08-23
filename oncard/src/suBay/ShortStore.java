@@ -1,23 +1,28 @@
 package suBay;
+
+/**
+ * Datenklasse zur Verwaltung eines Short-Wertes
+ *
+ */
 public class ShortStore {
 	
+	/**
+	 * Zu speichernder Wert
+	 */
 	private short storedValue;
 	  
 	public ShortStore(short initVal) {
 	  this.storedValue = initVal;
 	}
 	  
-	/**
-	 *
-	 *
-	 */
+
 	public short getValue() {
 	  return this.storedValue;
 	}
 	  	
 	/**
 	 *
-	 * return True, if adding of diff was successful
+	 * return True, wenn hinzufuegen erfolgreich war
 	 */
 	public boolean addValue(short diff) {
 		short newAmount = (short) (this.storedValue + diff);
@@ -30,7 +35,7 @@ public class ShortStore {
 	
 	/**
 	 *
-	 * return True, if removing of diff was successful
+	 * return True, wenn loeschen erfolgreich war
 	 */
 	public boolean subValue(short diff) {
 		if (diff < this.storedValue) {
