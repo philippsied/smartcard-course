@@ -168,7 +168,7 @@ ohne Herausgabe des Schlüssels zu ermöglichen wird eine Lambda-Funktion (Schni
 	\label{tab:walletdata}%
 \end{table}%
 
-Bei dem Abbuchen eines Geldbetrages wird geprüft, ob der angeforderte Betrag mindestens dem aufgeladenen Guthabens entspricht. Bei einem zu hohen Geldbetrag wird die Aktion mit einer Exception (0x6A83) beendet. Auch das Überschreiten des maximalen Guthabens wird durch eine Exception (0x6A84) abgefangen.
+Bei dem Abbuchen eines Geldbetrages wird geprüft, ob der angeforderte Betrag mindestens dem aufgeladenen Guthabens entspricht. Bei einem zu hohen Geldbetrag wird die Aktion mit einer Exception beendet. Auch das Überschreiten des maximalen Guthabens wird durch eine Exception signalisiert.
 
 \paragraph{OffCard} Die OffCard-Anwendung zum aufladen der Geldkarte fällt entsprechend der wenigen Funktionen des Applets sehr klein aus. Über eine ComboBox lässt sich ein entsprechender Betrag zum aufladen schnell auswählen und über die Schaltfläche \textit{Aufladen} zur Karte übertragen. 
 
@@ -198,7 +198,7 @@ Das Ticketsystem ist fundamentale Grundlage für dieses Projekt. Nach der Implem
     \hline
     \tbf{Ticket} 	&       	& Aktuelles Ticket setzen 	& 0x10 \\
     Beginn\_h 		& short 	& Aktuelles Ticket abfragen 	& 0x20 \\
-    Beginn\_l 		& short 	& Vorheriges Ticket abfragen 	& 0x40 \\
+    Beginn\_l 		& short 	& Vorheriges Ticket abfragen 	& 0x30 \\
     Ende\_h 		& short 	&       			&  \\
     Ende\_l 		& short  	&       			&  \\
     Beschreibung 	& 30 Byte  	&       			&  \\
